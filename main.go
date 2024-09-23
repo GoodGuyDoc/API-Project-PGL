@@ -1,7 +1,7 @@
 package main
 
 import (
-	api "API-Project-PGL/api_retrieval"
+	api "API-Project-PGL/api_retreival"
 	"API-Project-PGL/fileops"
 	"fmt"
 	"strings"
@@ -17,6 +17,18 @@ func main() {
 			fmt.Println("Invalid input. Please enter a number.")
 			continue
 		}
+	/*
+	tempslice := []string{"Italian", "dessert"}
+
+	api.GetRandomRecipe(tempslice)
+
+	return
+	*/
+
+	err := fileops.WriteToFile("testfile.txt", "Hello, World!")
+	if err != nil {
+		fmt.Println(err)
+	}
 
 		switch choice {
 		case 1:
