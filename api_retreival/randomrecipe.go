@@ -28,12 +28,12 @@ type Recipe struct {
 func GetRandomRecipe(tags []string) {
 	recipeChannel := make(chan *Recipe)
 	go callRandomRecipe(tags, recipeChannel)
-	for recipe := range recipeChannel {
-		// TODO: Remove this eventually
-		fmt.Printf("recipe pointer points to: %p, recipe pointer's address is: %p\n", recipe, &recipe)
-		// TODO: Send the data to another function to print
-		fmt.Printf("The title of the recipe you got: %s", recipe.title)
-	}
+
+	recipe := <-recipeChannel
+	// TODO: Remove this eventually
+	fmt.Printf("recipe pointer points to: %p, recipe pointer's address is: %p\n", recipe, &recipe)
+	// TODO: Send the data to another function to print
+	fmt.Printf("The title of the recipe you got: %s", recipe.title)
 }
 
 // Gets a random random recipe with the provided param(s) and sends the data through the string channel
