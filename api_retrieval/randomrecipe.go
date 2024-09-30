@@ -29,7 +29,12 @@ func GetRandomRecipe(tags []string) {
 	recipeChannel := make(chan *Recipe)
 	go callRandomRecipe(tags, recipeChannel)
 
-	recipe := <-recipeChannel
+	recipe, ok := <-recipeChannel
+	if !ok {
+		fmt.Printf("Your search returned 0 results.")
+		return
+	}
+
 	// TODO: Remove this eventually
 	fmt.Printf("recipe pointer points to: %p, recipe pointer's address is: %p\n", recipe, &recipe)
 	// TODO: Send the data to another function to print
@@ -38,24 +43,26 @@ func GetRandomRecipe(tags []string) {
 
 // Gets a random random recipe with the provided param(s) and sends the data through the string channel
 func callRandomRecipe(includes []string, ch chan *Recipe) {
-	includetags := strings.Join(includes, ",")
+	includetags := strings.ToLower(strings.Join(includes, ","))
 	jsonData, err := getSpoonData("https://api.spoonacular.com/recipes/random?apiKey=" + API_KEY + "&number=1&include-tags=" + includetags)
 	if err != nil {
 		panic(err)
 	}
 
-	recipe := Recipe{}
-	val := gjson.GetBytes(jsonData, "recipes.0.vegetarian")
-	recipe.vegetarian = val.Bool()
-	recipe.vegan = gjson.GetBytes(jsonData, "recipes.0.vegan").Bool()
-	recipe.veryHealthy = gjson.GetBytes(jsonData, "recipes.0.veryHealthy").Bool()
-	recipe.veryPopular = gjson.GetBytes(jsonData, "recipes.0.veryPopular").Bool()
-	recipe.readyInMinutes = int(gjson.GetBytes(jsonData, "recipes.0.readyInMinutes").Int())
-	recipe.servings = int(gjson.GetBytes(jsonData, "recipes.0.servings").Int())
-	recipe.title = gjson.GetBytes(jsonData, "recipes.0.title").String()
-	recipe.summary = gjson.GetBytes(jsonData, "recipes.0.summary").String()
-	recipe.instructions = gjson.GetBytes(jsonData, "recipes.0.instructions").String()
+	if gjson.GetBytes(jsonData, "recipes.0").Exists() {
+		recipe := Recipe{}
+		recipe.vegetarian = gjson.GetBytes(jsonData, "recipes.0.vegetarian").Bool()
+		recipe.vegan = gjson.GetBytes(jsonData, "recipes.0.vegan").Bool()
+		recipe.veryHealthy = gjson.GetBytes(jsonData, "recipes.0.veryHealthy").Bool()
+		recipe.veryPopular = gjson.GetBytes(jsonData, "recipes.0.veryPopular").Bool()
+		recipe.readyInMinutes = int(gjson.GetBytes(jsonData, "recipes.0.readyInMinutes").Int())
+		recipe.servings = int(gjson.GetBytes(jsonData, "recipes.0.servings").Int())
+		recipe.title = gjson.GetBytes(jsonData, "recipes.0.title").String()
+		recipe.summary = gjson.GetBytes(jsonData, "recipes.0.summary").String()
+		recipe.instructions = gjson.GetBytes(jsonData, "recipes.0.instructions").String()
 
-	ch <- &recipe
+		ch <- &recipe
+	}
+
 	close(ch)
 }
