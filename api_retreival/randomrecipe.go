@@ -29,7 +29,7 @@ func GetRandomRecipe(tags []string) {
 	go callRandomRecipe(tags, recipeChannel)
 	for recipe := range recipeChannel {
 		// TODO: Remove this eventually
-		fmt.Printf("i points to: %p, i's address is: %p\n", recipe, &recipe)
+		fmt.Printf("recipe pointer points to: %p, recipe pointer's address is: %p\n", recipe, &recipe)
 		// TODO: Send the data to another function to print
 		fmt.Printf("The title of the recipe you got: %s", recipe.title)
 	}
