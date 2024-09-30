@@ -1,7 +1,7 @@
 package main
 
 import (
-	api "API-Project-PGL/api_retreival"
+	api "API-Project-PGL/api_retrieval"
 	"API-Project-PGL/fileops"
 	"fmt"
 	"strings"
@@ -18,7 +18,7 @@ func main() {
 			continue
 		}
 
-		err := fileops.WriteToFile("testfile.txt", "Hello, World!")
+		err = fileops.WriteToFile("testfile.txt", "Hello, World!")
 		if err != nil {
 			fmt.Println(err)
 		}
