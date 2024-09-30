@@ -2,11 +2,13 @@ package api_retrieval
 
 import (
 	// "errors"
-	"encoding/json"
+
 	"fmt"
 	"io"
 	"net/http"
 	"strings"
+
+	"github.com/tidwall/gjson"
 	// "os"
 	//"time"
 )
@@ -27,39 +29,20 @@ func callRandomRecipe(includes []string, ch chan string) {
 	includetags := strings.Join(includes, ",")
 	resp, err := http.Get("https://api.spoonacular.com/recipes/random?apiKey=" + API_KEY + "&number=1&include-tags=" + includetags)
 	if err != nil {
-		panic(err) // Unsure what error actually looks like if there is one
+		panic(err)
 	}
-	// fmt.Println(resp.Body)
 	defer resp.Body.Close()
 
+	// body is byte array
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	// body is byte array
 
-	var jsonRes map[string]interface{} // declaring a map for key names as string and values as interface
-	_ = json.Unmarshal(body, &jsonRes) // Unmarshalling
-	// why is this set to _ above?
+	result := gjson.GetBytes(body, "recipes.0.vegetarian")
 
-	// title := jsonRes["title"].(string) // convert value to string, we expect string
-
-	// fmt.Println(title)
-
-	// TODO: Fix this pls
-	// recipes := jsonRes["recipes"].([]interface{})
-	// recipes2 := recipes[0].(map[string]interface{})
-	// recipes3 := recipes2[""]
-	fmt.Printf("%s", jsonRes)
-
-	// var j interface{}
-	// err = json.NewDecoder(resp.Body).Decode(&j)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// fmt.Println(j["Title"])
-	// fmt.Printf("%s", j)
+	fmt.Println(result)
 
 	close(ch)
 }
