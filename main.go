@@ -18,6 +18,11 @@ func main() {
 			continue
 		}
 
+		err = fileops.WriteToFile("testfile.txt", "Hello, World!")
+		if err != nil {
+			fmt.Println(err)
+		}
+
 		switch choice {
 		case 1:
 			handleRandomRecipe()
@@ -162,4 +167,3 @@ func handleDeleteFromMealPlan() {
 
 	fmt.Println("Item deleted from meal plan successfully.")
 }
-
