@@ -9,7 +9,8 @@ import (
 
 const API_KEY string = "1eb4022c30c9430b8050b301be5339b9"
 
-// TODO: Fill this entirely or as we need more data
+// TODO: Fill this as we need more data
+// TODO: Move this to another file perhaps
 // Struct defining all of the important data we care about from a recipe
 type Recipe struct {
 	vegetarian     bool
@@ -43,7 +44,6 @@ func callRandomRecipe(includes []string, ch chan *Recipe) {
 		panic(err)
 	}
 
-	// TODO: Is there a better way to iterate through each part of the struct and grab the value?
 	recipe := Recipe{}
 	val := gjson.GetBytes(jsonData, "recipes.0.vegetarian")
 	recipe.vegetarian = val.Bool()
