@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="./static/styles.css"> 
+    <title>Golang Grub</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Golang Grub</h1>
+    </header>
+    <form hx-post="/add-tag/">
+        <fieldset>
+            <legend>Choose your tags:</legend>
+            
+            {{ range .Tags }}
+
+            <div>
+                <input type="checkbox" id="{{ . }}" name="{{ . }}" />
+                <label for="{{ . }}">{{ . }}</label>
+              </div>
+
+            {{ end }}
+            
+          </fieldset> 
+          <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
