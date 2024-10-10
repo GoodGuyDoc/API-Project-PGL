@@ -9,23 +9,36 @@
 </head>
 <body>
     <header>
-        <h1>Welcome to Golang Grub</h1>
+        <h1>Golang Grub</h1>
     </header>
-    <form hx-post="/add-tag/">
-        <fieldset>
-            <legend>Choose your tags:</legend>
-            
-            {{ range .Tags }}
-
-            <div>
-                <input type="checkbox" id="{{ . }}" name="{{ . }}" />
-                <label for="{{ . }}">{{ . }}</label>
-              </div>
-
-            {{ end }}
-            
-          </fieldset> 
-          <button type="submit">Submit</button>
-    </form>
+    <main>
+        <h2>Want a Random Recipe?</h2>
+        <form hx-post="/send-tag/">
+            <fieldset>
+                <h3>Select Your Must Haves:</h3>
+                {{ range .Tags }}
+                <div>
+                    <input type="checkbox" id="{{ . }}" name="{{ . }}" />
+                    <label for="{{ . }}">{{ . }}</label>
+                  </div>
+    
+                {{ end }}
+            </fieldset> 
+            <fieldset>
+                <h3>Select What to Avoid:</h3>
+                {{ range .Tags }}
+                <div>
+                    <input type="checkbox" id="{{ . }}" name="{{ . }}" />
+                    <label for="{{ . }}">{{ . }}</label>
+                  </div>
+    
+                {{ end }}
+            </fieldset>
+            <button type="submit" class="btn-11">Generate</button>
+        </form>
+       
+    </main>
 </body>
 </html>
+
+
