@@ -2,12 +2,16 @@ package main
 
 import (
 	api "API-Project-PGL/api_retrieval"
-	"API-Project-PGL/fileops"
+	//"API-Project-PGL/fileops"
 	"fmt"
-	"strings"
+	//"strings"
+	"html/template"
+	"log"
+	"net/http"
 )
 
 func main() {
+	/* commenting out code w/ command line aspects for http testing
 	for {
 		menu()
 		var choice int
@@ -41,6 +45,54 @@ func main() {
 			fmt.Println("Invalid choice. Please try again.")
 		}
 	}
+	*/
+
+	/*
+		This is very rough code
+		Just showing some stuff w/ http
+		Everything can be changed and probably
+		should be moved to other places :]
+	*/
+
+	tags := map[string][]string{
+		"Tags": {"dessert", "italian"},
+	}
+
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	h1 := func(w http.ResponseWriter, r *http.Request) {
+		tmpl := template.Must(template.ParseFiles("index.html"))
+		tmpl.Execute(w, tags)
+	}
+
+	h2 := func(w http.ResponseWriter, r *http.Request) {
+		var responseTags []string
+
+		for key := range tags["Tags"] {
+
+			if r.PostFormValue(tags["Tags"][key]) == "on" {
+				responseTags = append(responseTags, tags["Tags"][key])
+			}
+
+		}
+		handleRandomRecipe(responseTags)
+		fmt.Println()
+		fmt.Println()
+		// the template isn't set up yet
+		// Functions wil have to be edited to return the data
+		// tmpl.Execute(w, whateverAPIwillReturn)
+		// for now, just redirect back to the form
+
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+
+	}
+
+	http.HandleFunc("/", h1)
+	http.HandleFunc("/send-tag/", h2)
+
+	log.Fatal(http.ListenAndServe(":8000", nil))
+
 }
 
 func menu() {
@@ -53,10 +105,11 @@ func menu() {
 	fmt.Println("6. Exit")
 }
 
-func handleRandomRecipe() {
-	tempslice := []string{"Italian", "dessert"} // Example tags
-	api.GetRandomRecipe(tempslice)
+func handleRandomRecipe(tags []string) {
+	api.GetRandomRecipe(tags)
 }
+
+/* commenting out code w/ errors for http testing
 
 func handleFindRecipesByIngredients() {
 	var input string
@@ -167,3 +220,4 @@ func handleDeleteFromMealPlan() {
 
 	fmt.Println("Item deleted from meal plan successfully.")
 }
+*/
