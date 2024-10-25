@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Spoonacular API App</title>
+</head>
+<body>
+    <h1>Welcome to the Spoonacular API App</h1>
+    <p>Explore recipes, save your favorites, and more.</p>
+    <div id="user-info"></div>
+    <a href="/api/recipes">View Recipes</a>
+    <div id="content"></div>
+
+    <script>
+        async function checkUserStatus() {
+            const response = await fetch('/api/profile');
+            const userInfo = document.getElementById('user-info');
+
+            if (response.ok) {
+                const profile = await response.json();
+                userInfo.innerHTML = `
+                    <p>Welcome, ${profile.FirstName}!</p>
+                    <button onclick="logout()">Logout</button>
+                `;
+            } else {
+                userInfo.innerHTML = `
+                    <a href="/register">Register</a> | <a href="/login">Login</a>
+                `;
+            }
+        }
+
+        async function logout() {
+            const response = await fetch('/api/logout', {
+                method: 'POST',
+            });
+
+            if (response.ok) {
+                alert('Logged out successfully');
+                window.location.reload(); // Reload the page to reflect the logged-out state.
+            } else {
+                alert('Failed to log out');
+            }
+        }
+
+        async function fetchRecipes() {
+            const response = await fetch('/api/recipes');
+            if (response.ok) {
+                const recipes = await response.json();
+                const content = document.getElementById('content');
+                content.innerHTML = recipes.map(recipe => `
+                    <div>
+                        <h2>${recipe.title}</h2>
+                        <a href="/recipe/${recipe.id}">
+                            <img src="${recipe.image}" alt="${recipe.title}" style="max-width: 200px;">
+                        </a>
+                        <button onclick="addFavorite(${recipe.id}, '${recipe.title}', '${recipe.image}')">Add to Favorites</button>
+                    </div>
+                `).join('');
+            } else {
+                console.error('Failed to fetch recipes');
+            }
+        }
+
+        async function addFavorite(recipeID, title, image) {
+            const response = await fetch('/api/add-favorite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ recipe_id: recipeID, title, image })
+            });
+
+            const result = await response.json();
+            alert(result.message || 'Failed to add favorite');
+        }
+
+        // Load user info and recipes on page load
+        checkUserStatus();
+        fetchRecipes();
+    </script>
+</body>
+</html>

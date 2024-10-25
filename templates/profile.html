@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Profile</title>
+</head>
+<body>
+    <h1>Your Profile</h1>
+    <div id="error-message"></div>
+    <div id="profile-content"></div>
+    <div id="favorites-content"></div>
+    <button onclick="logout()">Logout</button>
+
+    <script>
+        const errorMessage = "{{.ErrorMessage}}";
+
+        // Display an error message if there is one.
+        if (errorMessage) {
+            document.getElementById('error-message').innerText = errorMessage;
+        } else {
+            // Fetch user profile details if no error message.
+            fetchUserProfile();
+        }
+
+        // Fetch user profile details and display them.
+        async function fetchUserProfile() {
+            const response = await fetch('/api/profile');
+            if (response.ok) {
+                const profile = await response.json();
+                const profileContent = document.getElementById('profile-content');
+                profileContent.innerHTML = `
+                    <p><strong>First Name:</strong> ${profile.FirstName}</p>
+                    <p><strong>Username:</strong> ${profile.Username}</p>
+                `;
+
+                // Display user's favorite recipes if available.
+                const favoritesContent = document.getElementById('favorites-content');
+                if (profile.Recipes && profile.Recipes.length > 0) {
+                    favoritesContent.innerHTML = `
+                        <h2>Your Favorite Recipes</h2>
+                        <ul>
+                            ${profile.Recipes.map(recipe => `
+                                <li>
+                                    <a href="/recipe/${recipe.RecipeID}">
+                                        <img src="${recipe.Image}" alt="${recipe.Title}" style="max-width: 100px;">
+                                        ${recipe.Title}
+                                    </a>
+                                    <p>Added on: ${new Date(recipe.AddedAt).toLocaleDateString()}</p>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    `;
+                } else {
+                    favoritesContent.innerHTML = `<p>You have no favorite recipes yet.</p>`;
+                }
+            } else {
+                document.getElementById('profile-content').innerText = 'Failed to load profile data.';
+            }
+        }
+
+        // Logout the user and redirect to the login page.
+        async function logout() {
+            const response = await fetch('/api/logout', {
+                method: 'POST',
+            });
+
+            if (response.ok) {
+                alert('Logged out successfully');
+                window.location.href = '/login'; // Redirect to login page after logout.
+            } else {
+                alert('Failed to log out');
+            }
+        }
+    </script>
+</body>
+</html>
