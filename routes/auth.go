@@ -14,8 +14,10 @@ import (
 
 // routes for authentication-related actions
 func SetupAuthRoutes() {
+	// handle and serve static HTML pages
 	http.HandleFunc("/register", RegisterPageHandler)
 	http.HandleFunc("/login", LoginPageHandler)
+	//handle and serve JSON data
 	http.HandleFunc("/api/register", AddUserHandler)
 	http.HandleFunc("/api/login", LoginHandler)
 	http.HandleFunc("/api/logout", LogoutHandler)
@@ -51,19 +53,19 @@ func RegisterPageHandler(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 }
 
-// handle user registration with a JSON-based API
+// handle user registration with a JSON-based API endpoint
 func AddUserHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
-
+	// define the request structure
 	var req struct {
 		Username  string `json:"username"`
 		FirstName string `json:"first_name"`
 		Password  string `json:"password"`
 	}
-
+	// decode the JSON request body
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
@@ -82,7 +84,7 @@ func AddUserHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error saving user to database", http.StatusInternalServerError)
 		return
 	}
-
+	// send a JSON response back to the frontend
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"message": "User registered successfully"})
 }
@@ -132,7 +134,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// create a session and store user ID.
+	// create a session and store user ID(used so users can only access their own data)
 	session, _ := session.Store.Get(r, "session-name")
 	session.Values["userID"] = userProfile.ID
 
@@ -149,6 +151,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 // handle user logout, clear the session
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
+	// clear the session
 	session, _ := session.Store.Get(r, "session-name")
 	session.Values["userID"] = nil
 	session.Options.MaxAge = -1

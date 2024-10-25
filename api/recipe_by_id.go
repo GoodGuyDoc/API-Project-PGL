@@ -25,7 +25,7 @@ func GetRecipeByID(recipeID string) (*Recipe, error) {
 		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
 
-	var recipe Recipe
+	var recipe Recipe // Unmarshal the JSON response into Recipe struct(located in random_recipe.go)
 	err = json.Unmarshal(body, &recipe)
 	if err != nil {
 		return nil, fmt.Errorf("error parsing JSON: %w", err)

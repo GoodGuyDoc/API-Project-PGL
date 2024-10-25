@@ -2,21 +2,19 @@ package routes
 
 import (
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"net/http"
-	"spoonacular-api/api"
 	"spoonacular-api/db"
 	"spoonacular-api/session"
 )
 
 func SetupUserRoutes() {
+	//handle and serve static HTML pages(accessable to user)
 	http.HandleFunc("/", HomePageHandler)
 	http.HandleFunc("/profile", ProfilePageHandler)
+
+	//handle and serve JSON data(accessed programmatically within the html pages)
 	http.HandleFunc("/api/profile", ProfileHandler)
-	http.HandleFunc("/api/recipes", RecipeHandler)
-	http.HandleFunc("/api/recipe/", RecipeDetailHandler)
-	http.HandleFunc("/recipe/", RecipeDetailPageHandler) // New route for serving the detailed HTML page
 	http.HandleFunc("/api/add-favorite", AddFavoriteHandler)
 }
 
@@ -30,9 +28,12 @@ func HomePageHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, nil)
 }
 
+// serves the static profile page
 func ProfilePageHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := session.Store.Get(r, "session-name")
 	userID, ok := session.Values["userID"].(int)
+
+	//if user is not logged in, redirect to login page
 	if !ok || userID == 0 {
 		tmpl, err := template.ParseFiles("templates/login.html")
 		if err != nil {
@@ -52,6 +53,7 @@ func ProfilePageHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, nil)
 }
 
+// ProfileHandler fetches the user's profile data and serves it as JSON back to the frontend.
 func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := session.Store.Get(r, "session-name")
 	userID, ok := session.Values["userID"].(int)
@@ -65,47 +67,12 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to load user profile", http.StatusInternalServerError)
 		return
 	}
-
+	//send json response back to the frontend
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(userProfile)
 }
 
-func RecipeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Fetching random recipes...")
-	recipes, err := api.GetRandomRecipes(5)
-	if err != nil {
-		http.Error(w, "Failed to get random recipes", http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(recipes)
-}
-
-// RecipeDetailPageHandler serves the recipe detail HTML page.
-func RecipeDetailPageHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/recipe_detail.html")
-	if err != nil {
-		http.Error(w, "Error loading template", http.StatusInternalServerError)
-		return
-	}
-
-	recipeID := r.URL.Path[len("/recipe/"):] // Extract the recipe ID from the URL.
-	tmpl.Execute(w, map[string]string{"RecipeID": recipeID})
-}
-
-func RecipeDetailHandler(w http.ResponseWriter, r *http.Request) {
-	recipeID := r.URL.Path[len("/api/recipe/"):] // Extract the recipe ID from the URL.
-	recipe, err := api.GetRecipeByID(recipeID)
-	if err != nil {
-		http.Error(w, "Failed to get recipe details", http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(recipe)
-}
-
+// AddFavoriteHandler handles adding a recipe to the user's favorites list.
 func AddFavoriteHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
@@ -130,6 +97,7 @@ func AddFavoriteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//add recipe to favorites table in the database(linked to user ID)
 	err := db.AddRecipeToFavorites(userID, req.RecipeID, req.Title, req.Image)
 	if err != nil {
 		http.Error(w, "Failed to add recipe to favorites", http.StatusInternalServerError)
