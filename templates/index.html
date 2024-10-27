@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to the Spoonacular API App</title>
-</head>
-<body>
+{{template "header.html" "styles.css"}}
+<main>
     <h1>Welcome to the Spoonacular API App</h1>
     <p>Explore recipes, save your favorites, and more.</p>
     <div id="user-info"></div>
@@ -79,5 +73,5 @@
         checkUserStatus();
         fetchRecipes();
     </script>
-</body>
-</html>
+</main>
+{{template "footer.html" .}}

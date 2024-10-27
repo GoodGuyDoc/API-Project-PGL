@@ -26,7 +26,7 @@ func SetupAuthRoutes() {
 // serves the login page for GET requests
 func LoginPageHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		tmpl, err := template.ParseFiles("templates/login.html")
+		tmpl, err := template.ParseFiles("templates/login.html", "templates/header.html", "templates/footer.html")
 		if err != nil {
 			http.Error(w, "Error loading template", http.StatusInternalServerError)
 			return
@@ -41,7 +41,7 @@ func LoginPageHandler(w http.ResponseWriter, r *http.Request) {
 // serves the registration page for GET requests
 func RegisterPageHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		tmpl, err := template.ParseFiles("templates/register.html")
+		tmpl, err := template.ParseFiles("templates/register.html", "templates/header.html", "templates/footer.html")
 		if err != nil {
 			http.Error(w, "Error loading template", http.StatusInternalServerError)
 			return

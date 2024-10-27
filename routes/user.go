@@ -20,7 +20,7 @@ func SetupUserRoutes() {
 
 // HomePageHandler serves the main HTML page when users visit the root URL.
 func HomePageHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/index.html")
+	tmpl, err := template.ParseFiles("templates/index.html", "templates/header.html", "templates/footer.html")
 	if err != nil {
 		http.Error(w, "Error loading template", http.StatusInternalServerError)
 		return
@@ -35,7 +35,7 @@ func ProfilePageHandler(w http.ResponseWriter, r *http.Request) {
 
 	//if user is not logged in, redirect to login page
 	if !ok || userID == 0 {
-		tmpl, err := template.ParseFiles("templates/login.html")
+		tmpl, err := template.ParseFiles("templates/login.html", "templates/header.html", "templates/footer.html")
 		if err != nil {
 			http.Error(w, "Error loading template", http.StatusInternalServerError)
 			return
@@ -44,7 +44,7 @@ func ProfilePageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tmpl, err := template.ParseFiles("templates/profile.html")
+	tmpl, err := template.ParseFiles("templates/profile.html", "templates/header.html", "templates/footer.html")
 	if err != nil {
 		http.Error(w, "Error loading template", http.StatusInternalServerError)
 		return

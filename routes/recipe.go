@@ -29,7 +29,7 @@ func RecipeHandler(w http.ResponseWriter, r *http.Request) {
 
 // RecipeDetailPageHandler serves the recipe detail HTML page.
 func RecipeDetailPageHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/recipe_detail.html")
+	tmpl, err := template.ParseFiles("templates/recipe_detail.html", "templates/header.html", "templates/footer.html")
 	if err != nil {
 		http.Error(w, "Error loading template", http.StatusInternalServerError)
 		return

@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Details</title>
-</head>
-<body>
+{{template "header.html" "styles.css"}}
+<main>
     <h1>Recipe Details</h1>
     <div id="recipe-content"></div>
 
@@ -43,5 +37,5 @@
         // Load recipe details on page load.
         fetchRecipeDetails();
     </script>
-</body>
-</html>
+</main>
+{{template "footer.html" .}}
