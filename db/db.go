@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	_ "github.com/lib/pq"
+	//_ "github.com/lib/pq"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type UserProfile struct {
@@ -25,15 +26,33 @@ type FavoriteRecipe struct {
 var DB *sql.DB
 
 // initialize db connections
-func InitDB(host, port, user, password, dbname string) error {
-	psqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
-
+func InitDB() error {
 	var err error
-	DB, err = sql.Open("postgres", psqlInfo)
+	DB, err = sql.Open("sqlite3", "./db/gogrub.db")
 	if err != nil {
 		return err
 	}
+
+	sqlStatement := `CREATE TABLE IF NOT EXISTS Users (
+		id INTEGER PRIMARY KEY,
+		username VARCHAR(255) UNIQUE NOT NULL,
+		first_name VARCHAR(50) NOT NULL,
+		password_hash VARCHAR(255) NOT NULL,
+		created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	);
+
+	CREATE TABLE IF NOT EXISTS Recipes (
+		id INTEGER PRIMARY KEY,
+		user_id INTEGER NOT NULL,
+		recipe_id INTEGER NOT NULL,
+		title VARCHAR(255) NOT NULL,
+		image TEXT NOT NULL,
+		date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+	);`
+
+	DB.Exec(sqlStatement)
 
 	return DB.Ping()
 }
@@ -103,7 +122,7 @@ func GetUserProfileByUsername(username string) (*UserProfile, error) {
 func AddRecipeToFavorites(userID, recipeID int, title, image string) error {
 	query := `
         INSERT INTO Recipes (user_id, recipe_id, title, image, date_added)
-        VALUES ($1, $2, $3, $4, NOW())
+        VALUES ($1, $2, $3, $4, datetime('now'))
     `
 	_, err := DB.Exec(query, userID, recipeID, title, image)
 	if err != nil {

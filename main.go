@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// Initialize the database connection
-	err := db.InitDB("localhost", "5432", "myuser", "password", "spoonacularapidb")
+	err := db.InitDB()
 	if err != nil {
 		log.Fatalf("Failed to connect to the database: %v", err)
 	}
