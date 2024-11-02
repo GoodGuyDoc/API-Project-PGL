@@ -1,10 +1,19 @@
 {{template "header.html" "styles.css"}}
+<link rel="stylesheet" href="nav-styles.css">
+<nav class="navbar">
+  <a href="/" class="active">Home</a>
+  <a href="/login">Login</a>
+  <a href="/register">Register</a>
+  <a href="/profile">Profile</a>
+</nav>
 <main>
+    <div class="content-wrapper">
     <h1>Welcome to the Spoonacular API App</h1>
     <p>Explore recipes, save your favorites, and more.</p>
     <div id="user-info"></div>
     <a href="/api/recipes">View Recipes</a>
     <div id="content"></div>
+    </div>
 
     <script>
         async function checkUserStatus() {
@@ -31,7 +40,7 @@
 
             if (response.ok) {
                 alert('Logged out successfully');
-                window.location.reload(); // Reload the page to reflect the logged-out state.
+                window.location.reload();
             } else {
                 alert('Failed to log out');
             }
@@ -69,7 +78,6 @@
             alert(result.message || 'Failed to add favorite');
         }
 
-        // Load user info and recipes on page load
         checkUserStatus();
         fetchRecipes();
     </script>

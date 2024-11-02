@@ -1,37 +1,54 @@
 {{template "header.html" "styles.css"}}
+<link rel="stylesheet" href="nav-styles.css">
+<nav class="navbar">
+  <a href="/">Home</a>
+  <a href="/login" class="active">Login</a>
+  <a href="/register">Register</a>
+  <a href="/profile">Profile</a>
+</nav>
 <main>
     <h1>Login</h1>
     <form id="login-form">
-        <input type="text" id="username" placeholder="Username" required>
-        <input type="password" id="password" placeholder="Password" required>
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
         <button type="submit">Login</button>
     </form>
-    <p id="message"></p>
+    <p id="message" aria-live="polite"></p>
+    <p>New user? <a href="/register">Register here</a></p>
 
     <script>
-        document.getElementById('login-form').addEventListener('submit', async (event) => {
+        const form = document.getElementById('login-form');
+        const message = document.getElementById('message');
+
+        form.addEventListener('submit', async (event) => {
             event.preventDefault();
+            message.textContent = 'Logging in...';
+
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
             try {
                 const response = await fetch('/api/login', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password })
                 });
 
                 const data = await response.json();
-                document.getElementById('message').textContent = data.message;
+                message.textContent = data.message;
 
                 if (response.ok) {
                     window.location.href = "/profile";
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                document.getElementById('message').textContent = 'An error occurred during login.';
+                message.textContent = 'An error occurred. Please try again later.';
             }
         });
     </script>

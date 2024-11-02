@@ -1,41 +1,79 @@
 {{template "header.html" "styles.css"}}
+<link rel="stylesheet" href="nav-styles.css">
+<nav class="navbar">
+  <a href="/">Home</a>
+  <a href="/login">Login</a>
+  <a href="/register" class="active">Register</a>
+  <a href="/profile">Profile</a>
+</nav>
 <main>
     <h1>Register</h1>
     <form id="register-form">
-        <input type="text" id="username" placeholder="Username" required>
-        <input type="text" id="first_name" placeholder="First Name" required>
-        <input type="password" id="password" placeholder="Password" required>
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required minlength="8">
+        </div>
+        <div>
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+        </div>
         <button type="submit">Register</button>
     </form>
-    <p id="message"></p>
+    <p id="message" aria-live="polite"></p>
+    <p>Already have an account? <a href="/login">Login here</a></p>
 
     <script>
-        document.getElementById('register-form').addEventListener('submit', async (event) => {
+        const form = document.getElementById('register-form');
+        const message = document.getElementById('message');
+
+        form.addEventListener('submit', async (event) => {
             event.preventDefault();
-            const username = document.getElementById('username').value;
-            const firstName = document.getElementById('first_name').value;
-            const password = document.getElementById('password').value;
+            if (form.checkValidity() && validateForm()) {
+                message.textContent = 'Registering...';
 
-            try {
-                const response = await fetch('/api/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, first_name: firstName, password })
-                });
+                const username = document.getElementById('username').value;
+                const firstName = document.getElementById('first_name').value;
+                const password = document.getElementById('password').value;
 
-                const data = await response.json();
-                document.getElementById('message').textContent = data.message;
+                try {
+                    const response = await fetch('/api/register', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username, first_name: firstName, password })
+                    });
 
-                if (response.ok) {
-                    window.location.href = "/login";
+                    const data = await response.json();
+                    message.textContent = data.message;
+
+                    if (response.ok) {
+                        window.location.href = "/login";
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    message.textContent = 'An error occurred. Please try again later.';
                 }
-            } catch (error) {
-                console.error('Registration error:', error);
-                document.getElementById('message').textContent = 'An error occurred during registration.';
             }
         });
+
+        function validateForm() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            
+            if (password !== confirmPassword) {
+                message.textContent = "Passwords do not match.";
+                return false;
+            }
+            
+            return true;
+        }
     </script>
 </main>
 {{template "footer.html" .}}

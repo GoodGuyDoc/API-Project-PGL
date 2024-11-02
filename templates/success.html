@@ -1,6 +1,50 @@
 {{template "header.html" "styles.css"}}
+<link rel="stylesheet" href="nav-styles.css">
+<nav class="navbar">
+  <a href="/">Home</a>
+  <a href="/profile">Profile</a>
+  <a href="#" onclick="logout()">Logout</a>
+</nav>
 <main>
-    <h1>Login successful!</h1>
-    <p>Welcome, you are now logged in.</p>
+    <h1>Login Successful!</h1>
+    <p>Welcome{{if .UserName}}, {{.UserName}}{{end}}! You are now logged in.</p>
+    
+    <div class="success-actions">
+        <a href="/profile" class="button">View Profile</a>
+        <a href="/" class="button">Go to Home</a>
+    </div>
+
+    <p>You will be redirected to the home page in <span id="countdown">5</span> seconds.</p>
+
+    <script>
+        let seconds = 5;
+        const countdownElement = document.getElementById('countdown');
+        
+        const countdownTimer = setInterval(function() {
+            seconds--;
+            countdownElement.textContent = seconds;
+            if (seconds <= 0) {
+                clearInterval(countdownTimer);
+                window.location.href = '/';
+            }
+        }, 1000);
+
+        async function logout() {
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST',
+                });
+
+                if (response.ok) {
+                    alert('Logged out successfully');
+                    window.location.href = '/login';
+                } else {
+                    throw new Error('Failed to log out');
+                }
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+    </script>
 </main>
 {{template "footer.html" .}}
