@@ -1,0 +1,223 @@
+/* General reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Full-height layout */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Body styling */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #E9E9E9;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navigation bar styling */
+.navbar {
+  background-color: #567568;
+  overflow: hidden;
+  padding: 10px 0;
+}
+
+.navbar a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.navbar a:hover {
+  background-color: #405b58;
+}
+
+.navbar a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Main content container */
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.content-wrapper {
+  background-color: white;
+  width: 100%;
+  max-width: 900px;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Header text */
+h1 {
+  font-size: 2.5rem;
+  color: #567568;
+  margin-bottom: 20px;
+}
+
+/* Introductory paragraph */
+p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* User info and links */
+#user-info {
+  margin-bottom: 20px;
+}
+
+#user-info a {
+  display: inline-block;
+  font-size: 1rem;
+  text-decoration: none;
+  color: #fff;
+  background-color: #567568;
+  padding: 10px 20px;
+  border-radius: 8px;
+  margin: 0 10px;
+  transition: background-color 0.3s ease;
+}
+
+#user-info a:hover {
+  background-color: #405b58;
+}
+
+/* Content section (recipes grid) */
+#content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+/* Recipe card styling */
+#content div {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  transition: 0.3s ease-in-out;
+}
+
+#content div:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+#content h2 {
+  font-size: 1.5rem;
+  color: #567568;
+  margin-bottom: 0.5rem;
+}
+
+#content img {
+  max-width: 100%;
+  border-radius: 0.5rem;
+  margin-bottom: 10px;
+}
+
+/* Add to favorites button */
+button {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  background-color: #567568;
+  color: #fff;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: auto;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #405b58;
+}
+
+/* Footer */
+footer {
+  margin-top: 0.75rem;
+  color: #567568;
+  font-size: 0.9rem;
+}
+
+/* Form styling */
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+form input {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+form button {
+  margin-top: 20px;
+}
+
+/* Message styling */
+#message {
+  margin-top: 20px;
+  font-weight: bold;
+  color: #567568;
+}
+
+/* Error message styling */
+#error-message {
+  color: #d9534f;
+  margin-bottom: 20px;
+}
+
+/* Profile content styling */
+#profile-content, #favorites-content {
+  margin-top: 30px;
+  text-align: left;
+}
+
+#favorites-content ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#favorites-content li {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
+}
+
+#favorites-content img {
+  max-width: 100px;
+  border-radius: 5px;
+  margin-right: 15px;
+  vertical-align: middle;
+}

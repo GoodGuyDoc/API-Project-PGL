@@ -1,0 +1,21 @@
+{{template "header.html" "styles.css"}}
+    <header>
+        <h1>Welcome to Golang Grub</h1>
+    </header>
+    <form hx-post="/search/tag" hx-swap="innerHTML">
+        <fieldset>
+            <legend>Choose your tags:</legend>
+            
+            {{ range .Tags }}
+
+            <div>
+                <input type="checkbox" id="{{ . }}" name="{{ . }}" />
+                <label for="{{ . }}">{{ . }}</label>
+              </div>
+
+            {{ end }}
+            
+          </fieldset> 
+          <button type="submit">Submit</button>
+    </form>
+{{template "footer.html" .}}

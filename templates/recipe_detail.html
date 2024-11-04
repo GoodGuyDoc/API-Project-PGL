@@ -1,0 +1,41 @@
+{{template "header.html" "styles.css"}}
+<main>
+    <h1>Recipe Details</h1>
+    <div id="recipe-content"></div>
+
+    <script>
+        const recipeID = "{{.RecipeID}}";
+
+        // Fetch recipe details based on the recipe ID.
+        async function fetchRecipeDetails() {
+            const response = await fetch(`/api/recipe/${recipeID}`);
+            if (response.ok) {
+                const recipe = await response.json();
+                const content = document.getElementById('recipe-content');
+                content.innerHTML = `
+                    <h2>${recipe.title}</h2>
+                    <img src="${recipe.image}" alt="${recipe.title}" style="max-width: 400px;">
+                    <h3>Ingredients:</h3>
+                    <ul>
+                        ${recipe.extendedIngredients.map(ingredient => `<li>${ingredient.original}</li>`).join('')}
+                    </ul>
+                    <h3>Instructions:</h3>
+                    ${recipe.analyzedInstructions.map(instruction => `
+                        <div>
+                            <h4>${instruction.name}</h4>
+                            <ol>
+                                ${instruction.steps.map(step => `<li>${step.step}</li>`).join('')}
+                            </ol>
+                        </div>
+                    `).join('')}
+                `;
+            } else {
+                console.error('Failed to fetch recipe details');
+            }
+        }
+
+        // Load recipe details on page load.
+        fetchRecipeDetails();
+    </script>
+</main>
+{{template "footer.html" .}}
