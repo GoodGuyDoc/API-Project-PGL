@@ -6,7 +6,7 @@ import (
 	"time"
 
 	//_ "github.com/lib/pq"
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 type UserProfile struct {
@@ -28,7 +28,7 @@ var DB *sql.DB
 // initialize db connections
 func InitDB() error {
 	var err error
-	DB, err = sql.Open("sqlite3", "./db/gogrub.db")
+	DB, err = sql.Open("sqlite", "./db/gogrub.db")
 	if err != nil {
 		return err
 	}
