@@ -36,7 +36,7 @@ type Step struct {
 // fetches a random recipe from the Spoonacular API
 func GetRandomRecipes(count int) ([]Recipe, error) {
 	apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/random?apiKey=%s&number=%d", API_KEY, count)
-	recipeResponse, err := send_api_call(apiUrl)
+	recipeResponse, err := send_api_call(apiUrl, true)
 	if err != nil {
 		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
 	}
