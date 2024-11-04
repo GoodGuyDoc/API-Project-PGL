@@ -47,11 +47,11 @@ After setting up, you can run the app with:
 go run .
 ```
 
-This will start the server on `http://localhost:8000`.
+This will start the server on `http://localhost:8080`.
 
 ### Usage
 
-1. Open a web browser and navigate to [http://localhost:8000](http://localhost:8000).
+1. Open a web browser and navigate to [http://localhost:8080](http://localhost:8080).
 2. You should see the GoGrub website, where you can sign up, log in, and start using the app.
 
 ### Project Structure
