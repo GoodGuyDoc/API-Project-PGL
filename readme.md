@@ -18,8 +18,8 @@ Follow the instructions below to get GoGrub running locally on your machine.
    Start by cloning the repository and navigating to the project folder:
 
    ```bash
-   git clone https://github.com/yourusername/gogrub.git
-   cd gogrub
+   git clone https://github.com/alliecostner27/API-Project-PGL.git
+   cd API-Project-PGL
    ```
 
 2. **Pull the Latest Changes**
