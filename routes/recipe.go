@@ -19,7 +19,8 @@ func RecipeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Fetching random recipes...")
 	recipes, err := api.GetRandomRecipes(5) //get 5 random recipes
 	if err != nil {
-		http.Error(w, "Failed to get random recipes", http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "application/json")
+		http.Error(w, `{"error": "Failed to get random recipes"}`, http.StatusInternalServerError)
 		return
 	}
 
@@ -31,7 +32,8 @@ func RecipeHandler(w http.ResponseWriter, r *http.Request) {
 func RecipeDetailPageHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, err := template.ParseFiles("templates/recipe_detail.html", "templates/header.html", "templates/footer.html")
 	if err != nil {
-		http.Error(w, "Error loading template", http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "application/json")
+		http.Error(w, `{"error": "Error loading template"}`, http.StatusInternalServerError)
 		return
 	}
 
@@ -44,7 +46,8 @@ func RecipeDetailHandler(w http.ResponseWriter, r *http.Request) {
 	recipeID := r.URL.Path[len("/api/recipe/"):] //extract the recipe ID from the URL
 	recipe, err := api.GetRecipeByID(recipeID)   //get recipe details by ID
 	if err != nil {
-		http.Error(w, "Failed to get recipe details", http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "application/json")
+		http.Error(w, `{"error": "Failed to get recipe details"}`, http.StatusInternalServerError)
 		return
 	}
 
