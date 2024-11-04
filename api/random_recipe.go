@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -37,6 +38,18 @@ type Step struct {
 // Returns count amount of random recipes from spoonacular api
 func GetRandomRecipes(count int) ([]Recipe, error) {
 	apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/random?apiKey=%s&number=%d", API_KEY, count)
+	recipeResponse, err := getRecipeResponse(apiUrl)
+	if err != nil {
+		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
+	}
+
+	return recipeResponse.Recipes, nil
+}
+
+// Returns count amount of random recipes from spoonacular api that are tagged with the specified tags
+func GetRandomRecipesByTag(count int, tags []string) ([]Recipe, error) {
+	includeTags := strings.Join(tags, ",")
+	apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/random?apiKey=%s&number=%d&include-tags=%s", API_KEY, count, includeTags)
 	recipeResponse, err := getRecipeResponse(apiUrl)
 	if err != nil {
 		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
