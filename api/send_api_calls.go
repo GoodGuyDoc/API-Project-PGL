@@ -7,21 +7,8 @@ import (
 	"net/http"
 )
 
-// Takes an apiString, sends the call, and processes the response. Provides a pointer to the RecipeResponse.
-func send_api_call(apiString string, expectMoreThanOneRecipe bool) (*RecipeResponse, error) {
-	if expectMoreThanOneRecipe {
-		return send_multiple(apiString)
-	} else {
-		recipe, err := send_single(apiString)
-		recipeResponse := &RecipeResponse{
-			Recipes: []Recipe{},
-		}
-		recipeResponse.Recipes = append(recipeResponse.Recipes, *recipe)
-		return recipeResponse, err
-	}
-}
-
-func send_multiple(apiString string) (*RecipeResponse, error) {
+// Takes an apiString input to call, then returns a *RecipeResponse, or an error
+func getRecipeResponse(apiString string) (*RecipeResponse, error) {
 	resp, err := http.Get(apiString)
 	if err != nil {
 		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
@@ -67,7 +54,8 @@ func send_multiple(apiString string) (*RecipeResponse, error) {
 	return &recipeResponse, nil
 }
 
-func send_single(apiString string) (*Recipe, error) {
+// Takes an apiString input to call, then returns a *Recipe, or an error
+func getRecipe(apiString string) (*Recipe, error) {
 	resp, err := http.Get(apiString)
 	if err != nil {
 		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
