@@ -6,12 +6,14 @@ import (
 	"html/template"
 	"net/http"
 	"spoonacular-api/api"
+	"strconv"
 )
 
 func SetupRecipeRoutes() {
 	http.HandleFunc("/api/recipes", RecipeHandler)
 	http.HandleFunc("/api/recipe/", RecipeDetailHandler)
 	http.HandleFunc("/recipe/", RecipeDetailPageHandler)
+	http.HandleFunc("/api/convert", ConversionHandler)
 }
 
 // RecipeHandler fetches random recipes and serves them as JSON back to the frontend.
@@ -51,4 +53,32 @@ func RecipeDetailHandler(w http.ResponseWriter, r *http.Request) {
 	//send json response back to the frontend
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(recipe)
+}
+
+func ConversionHandler(w http.ResponseWriter, r *http.Request) {
+	ingredientName := r.URL.Query().Get("ingredientName")
+	amountParam := r.URL.Query().Get("amount")
+	unit := r.URL.Query().Get("unit")
+	convertToUnit := r.URL.Query().Get("convertToUnit")
+
+	if ingredientName == "" || amountParam == "" || unit == "" || convertToUnit == "" {
+		http.Error(w, "Missing required parameters", http.StatusBadRequest)
+		return
+	}
+
+	//convert amount to float
+	amount, err := strconv.ParseFloat(amountParam, 64)
+	if err != nil {
+		http.Error(w, "Invalid amount parameter", http.StatusBadRequest)
+		return
+	}
+
+	conversionInfo, err := api.ConvertAmount(ingredientName, amount, unit, convertToUnit)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to convert amount: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(conversionInfo)
 }
