@@ -17,9 +17,9 @@ func main() {
 	defer db.DB.Close()
 
 	// Set up routes
-	routes.SetupUserRoutes()
-	routes.SetupAuthRoutes()
-	routes.SetupRecipeRoutes()
+	go routes.SetupUserRoutes()
+	go routes.SetupAuthRoutes()
+	go routes.SetupRecipeRoutes()
 
 	// Set up static file server
 	fs := http.FileServer(http.Dir("static"))
