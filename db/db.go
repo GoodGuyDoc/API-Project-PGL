@@ -50,8 +50,21 @@ func InitDB() error {
 		image TEXT NOT NULL,
 		date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
-	);`
+	);
 
+	CREATE TABLE IF NOT EXISTS Tags (
+		id INTEGER PRIMARY KEY,
+		tag VARCHAR(255)
+	);
+
+	CREATE TABLE IF NOT EXISTS UserTags (
+		user_id INTEGER NOT NULL,
+		tag_id INTEGER NOT NULL,
+		FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE,
+		FOREIGN KEY (tag_id) REFERENCES Tags(id) ON DELETE CASCADE,
+		PRIMARY KEY(user_id, tag_id)
+	);
+	`
 	DB.Exec(sqlStatement)
 
 	return DB.Ping()
@@ -129,4 +142,66 @@ func AddRecipeToFavorites(userID, recipeID int, title, image string) error {
 		return fmt.Errorf("error adding recipe to favorites: %w", err)
 	}
 	return nil
+}
+
+func AddTagToFavorites(userID, tagID int) error {
+	query := `
+        INSERT INTO UserTags (user_id, tag_id)
+        VALUES ($1, $2)
+    `
+	_, err := DB.Exec(query, userID, tagID)
+	if err != nil {
+		return fmt.Errorf("error adding tag to favorites: %w", err)
+	}
+	return nil
+}
+
+func RemoveTagFromFavorites(userID, tagID int) error {
+	query := `
+        DELETE FROM UserTags 
+		WHERE user_id = $1 AND tag_id = $1;
+    `
+	_, err := DB.Exec(query, userID, tagID)
+	if err != nil {
+		return fmt.Errorf("error removing tag from favorites: %w", err)
+	}
+	return nil
+}
+
+func ClearFavoriteTags(userID int) error {
+	query := `
+		DELETE FROM UserTags 
+		WHERE user_id = $1;
+	`
+	_, err := DB.Exec(query, userID)
+	if err != nil {
+		return fmt.Errorf("error clearing favorite tags: %w", err)
+	}
+	return nil
+}
+
+func GetUserTags(userID int) ([]string, error) {
+
+	var userTags []string
+
+	rows, err := DB.Query(`
+        SELECT tag FROM UserTags 
+		JOIN Tags ON tag_id = id
+        WHERE user_id = $1`, userID)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching favorite tags: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var tag string
+		if err := rows.Scan(&tag); err != nil {
+			return nil, fmt.Errorf("error scanning favorite tag: %w", err)
+		}
+		userTags = append(userTags, tag)
+	}
+
+	fmt.Println(userTags)
+
+	return userTags, nil
 }
