@@ -54,7 +54,7 @@ func InitDB() error {
 
 	CREATE TABLE IF NOT EXISTS Tags (
 		id INTEGER PRIMARY KEY,
-		tag VARCHAR(255)
+		tag VARCHAR(255) UNIQUE
 	);
 
 	CREATE TABLE IF NOT EXISTS UserTags (
@@ -64,6 +64,9 @@ func InitDB() error {
 		FOREIGN KEY (tag_id) REFERENCES Tags(id) ON DELETE CASCADE,
 		PRIMARY KEY(user_id, tag_id)
 	);
+
+	INSERT OR IGNORE INTO Tags (tag) 
+	VALUES ('breakfast'), ('lunch'), ('dinner');
 	`
 	DB.Exec(sqlStatement)
 
@@ -201,7 +204,26 @@ func GetUserTags(userID int) ([]string, error) {
 		userTags = append(userTags, tag)
 	}
 
-	fmt.Println(userTags)
-
 	return userTags, nil
+}
+
+func GetAllTags() ([]string, error) {
+	var tags []string
+
+	rows, err := DB.Query(`
+        SELECT tag FROM Tags`)
+	if err != nil {
+		return nil, fmt.Errorf("error fetching tags: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var tag string
+		if err := rows.Scan(&tag); err != nil {
+			return nil, fmt.Errorf("error scanning tag: %w", err)
+		}
+		tags = append(tags, tag)
+	}
+
+	return tags, nil
 }
