@@ -198,28 +198,118 @@ form button {
   margin-bottom: 20px;
 }
 
-/* Profile content styling */
-#profile-content, #favorites-content {
-  margin-top: 30px;
-  text-align: left;
+/* Profile page specific styles */
+.profile-page {
+  background-color: #f9f9f9;
+  padding: 40px 0;
 }
 
-#favorites-content ul {
-  list-style-type: none;
-  padding: 0;
+.profile-page .content-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-#favorites-content li {
+.profile-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.profile-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: center;
   margin-bottom: 20px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 20px;
 }
 
-#favorites-content img {
-  max-width: 100px;
+#profile-picture {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #567568;
+}
+
+.profile-info h2 {
+  margin-bottom: 15px;
+}
+
+.profile-info p {
+  margin-bottom: 10px;
+}
+
+.logout-btn {
+  margin-top: 20px;
+  background-color: #d9534f;
+}
+
+.logout-btn:hover {
+  background-color: #c9302c;
+}
+
+/* Favorites content styling */
+#favorites-content {
+  margin-top: 30px;
+}
+
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.favorite-item {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  transition: 0.3s ease-in-out;
+}
+
+.favorite-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.favorite-item img {
+  max-width: 100%;
   border-radius: 5px;
-  margin-right: 15px;
-  vertical-align: middle;
+  margin-bottom: 10px;
+}
+
+.favorite-item h3 {
+  font-size: 1.2rem;
+  color: #567568;
+  margin-bottom: 5px;
+}
+
+.favorite-item p {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.no-favorites {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+#loading {
+  text-align: center;
+  color: #567568;
+  font-style: italic;
+  margin-bottom: 20px;
 }
 
 /* About page specific styles */
