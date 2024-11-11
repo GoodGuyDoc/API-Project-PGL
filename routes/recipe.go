@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"spoonacular-api/api"
 	"strconv"
-	"strings"
 )
 
 func SetupRecipeRoutes() {
@@ -43,12 +42,8 @@ func RecipeByTagHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// parse tags
-	tagsParam := r.URL.Query().Get("tags")
-	tags := []string{}
-	if tagsParam != "" {
-		tags = strings.Split(tagsParam, ",")
-	}
+	// get tags
+	tags := r.URL.Query().Get("tags")
 
 	recipes, err := api.GetRandomRecipesByTag(count, tags)
 	if err != nil {
