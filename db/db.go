@@ -66,7 +66,23 @@ func InitDB() error {
 	);
 
 	INSERT OR IGNORE INTO Tags (tag) 
-	VALUES ('breakfast'), ('lunch'), ('dinner');
+	VALUES 
+
+	('breakfast'), ('brunch'), ('lunch'), ('dinner'), ('dessert'),
+	('appetizer'), ('snack'), ('main course'), ('main dish'),
+	('beverage'), ('drink'),
+	('soup'), ('sandwich'),
+	('chicken'), ('beef'), ('fish'), ('seafood'),
+
+	('american'), ('french'), ('mexican'), ('latin american'),
+	('italian'), ('chinese'), ('south american'),
+
+	('gluten free'), ('dairy free'), ('vegetarian'), ('vegan'),
+	('pescatarian'),
+
+	('spring'), ('summer'), ('fall'), ('winter'),
+	('super bowl'), ('thanksgiving'), ('christmas'), ('halloween')
+	;
 	`
 	DB.Exec(sqlStatement)
 
