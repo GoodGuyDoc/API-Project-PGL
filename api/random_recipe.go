@@ -6,6 +6,8 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"testing"
+
 )
 
 const API_KEY = "a867e9b240a645c3a08192f8d6b8b61c"
@@ -85,6 +87,10 @@ func GetRandomRecipes(count int) ([]Recipe, error) {
 	return recipeResponse.Recipes, nil
 }
 
+
+
+
+
 // logToFile writes data to a file.
 func logToFile(filename string, data []byte) error {
 	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -105,4 +111,38 @@ func logToFile(filename string, data []byte) error {
 	}
 
 	return nil
+}
+
+func TestRandomRecipeCall(t *testing.T)([]Recipe recipe, error err){
+
+	recipe,err := GetRandomRecipes(1)
+	if err != nil {
+		t.Fail()
+	}
+	else{
+		fmt.Println("RandomRecipe Call Successful.")
+	}
+	return recipe, err
+}
+
+
+func TestLogToFile(t *testing.T) {
+	// Create a temporary directory for test files
+	tmpDir, err := os.MkdirTemp("", "recipe-test-*")
+	if err != nil {
+		t.Fatalf("Failed to create temp dir: %v", err)
+	}
+	defer os.RemoveAll(tmpDir)
+    //Create a test struct
+	tests := []struct {
+		name        string
+		data        []byte
+		expectError bool
+	}{
+		{
+			name:        "successful_write",
+			data:        []byte("test data"),
+			expectError: false,
+		},
+	}
 }

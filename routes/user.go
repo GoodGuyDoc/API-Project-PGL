@@ -6,16 +6,19 @@ import (
 	"net/http"
 	"spoonacular-api/db"
 	"spoonacular-api/session"
+	"testing"
 )
 
-func SetupUserRoutes() {
+func SetupUserRoutes()(err error) {
+	err := nil
 	//handle and serve static HTML pages(accessable to user)
-	http.HandleFunc("/", HomePageHandler)
-	http.HandleFunc("/profile", ProfilePageHandler)
+	err := http.HandleFunc("/", HomePageHandler)
+	err := http.HandleFunc("/profile", ProfilePageHandler)
 
 	//handle and serve JSON data(accessed programmatically within the html pages)
-	http.HandleFunc("/api/profile", ProfileHandler)
-	http.HandleFunc("/api/add-favorite", AddFavoriteHandler)
+	err := http.HandleFunc("/api/profile", ProfileHandler)
+	err := http.HandleFunc("/api/add-favorite", AddFavoriteHandler)
+	return err
 }
 
 // HomePageHandler serves the main HTML page when users visit the root URL.
@@ -29,12 +32,12 @@ func HomePageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // serves the static profile page
-func ProfilePageHandler(w http.ResponseWriter, r *http.Request) {
+func ProfilePageHandler(w http.ResponseWriter, r *http.Request)(err error) {
 	session, _ := session.Store.Get(r, "session-name")
 	userID, ok := session.Values["userID"].(int)
 
 	//if user is not logged in, redirect to login page
-	if !ok || userID == 0 {
+	if !ok || userID == 0 {han
 		tmpl, err := template.ParseFiles("templates/login.html", "templates/header.html", "templates/footer.html")
 		if err != nil {
 			http.Error(w, "Error loading template", http.StatusInternalServerError)
@@ -71,6 +74,44 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(userProfile)
 }
+
+func TestProfilePageHandler(*t testing.T){
+	var err := nil
+	req,err := http.NewRequest("GET","/profile",nil)
+	if err!= nil{
+		t.Fatal(err)
+	}
+	resRec := httptest.NewRecorder()
+	err := http.HandleFunc("/profile", ProfilePageHandler)
+}
+
+//Reference for writing testHandler
+/*
+func TestHealthCheckHandler(t *testing.T) {
+    // Create a request to pass to our handler. We don't have any query parameters for now, so we'll
+    // pass 'nil' as the third parameter.
+    req, err := http.NewRequest("GET", "/health-check", nil)
+    if err != nil {
+       t.Fatal(err)
+    }
+    // We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
+    rr := httptest.NewRecorder()
+    handler := http.HandlerFunc(HealthCheckHandler)
+    // Our handlers satisfy http.Handler, so we can call their ServeHTTP method
+    // directly and pass in our Request and ResponseRecorder.
+    handler.ServeHTTP(rr, req)
+    // Check the status code is what we expect.
+    if status := rr.Code; status != http.StatusOK {
+        t.Errorf("handler returned wrong status code: got %v want %v",
+            status, http.StatusOK)
+    }
+    // Check the response body is what we expect.
+    expected := `{"alive": true}`
+    if rr.Body.String() != expected {
+        t.Errorf("handler returned unexpected body: got %v want %v",
+            rr.Body.String(), expected)
+    }
+ */
 
 // AddFavoriteHandler handles adding a recipe to the user's favorites list.
 func AddFavoriteHandler(w http.ResponseWriter, r *http.Request) {
