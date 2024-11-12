@@ -1,0 +1,95 @@
+{{template "header.html" "styles.css"}}
+<link rel="stylesheet" href="nav-styles.css" />
+<nav class="navbar">
+  <a href="/" class="active">Home</a>
+  <a href="/login">Login</a>
+  <a href="/register">Register</a>
+  <a href="/profile">Profile</a>
+  <a href="/random_recipe" hx-get="/random_recipe" hx-target="body"
+  >Random Recipe</a>
+</nav>
+<main>
+  <div class="content-wrapper">
+    <h1>Welcome to Golang Grub</h1>
+    <p>Generate a random recipe, save your favorites, and more.</p>
+    <div id="user-info"></div>
+    <h1 id="get-started">Ready to Generate a Random Recipe? Click the Button Below!</h1>
+    <div>
+        <a href="/random_recipe"><button id="get-started-button" style="width: 50%;">Get Started</button></a>
+    <h2 id="example-title">Example Recipes Shown Below</h2>
+    <hr />
+    <div id="content"></div>
+  </div>
+
+  <script>
+    async function checkUserStatus() {
+      const response = await fetch("/api/profile");
+      const userInfo = document.getElementById("user-info");
+
+      if (response.ok) {
+        const profile = await response.json();
+        userInfo.innerHTML = `
+                    <p>Welcome, ${profile.FirstName}!</p>
+                    <button onclick="logout()">Logout</button>
+                `;
+      } else {
+        userInfo.innerHTML = `
+                    <a href="/register">Register</a> | <a href="/login">Login</a>
+                `;
+      }
+    }
+
+    async function logout() {
+      const response = await fetch("/api/logout", {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        alert("Logged out successfully");
+        window.location.reload();
+      } else {
+        alert("Failed to log out");
+      }
+    }
+
+    async function fetchRecipes() {
+      const response = await fetch("/api/recipes");
+      if (response.ok) {
+        const recipes = await response.json();
+        const content = document.getElementById("content");
+        content.innerHTML = recipes
+          .map(
+            (recipe) => `
+                    <div>
+                        <h2>${recipe.title}</h2>
+                        <a href="/recipe/${recipe.id}">
+                            <img src="${recipe.image}" alt="${recipe.title}" style="max-width: 200px;">
+                        </a>
+                        <button onclick="addFavorite(${recipe.id}, '${recipe.title}', '${recipe.image}')">Add to Favorites</button>
+                    </div>
+                `
+          )
+          .join("");
+      } else {
+        console.error("Failed to fetch recipes");
+      }
+    }
+
+    async function addFavorite(recipeID, title, image) {
+      const response = await fetch("/api/add-favorite", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ recipe_id: recipeID, title, image }),
+      });
+
+      const result = await response.json();
+      alert(result.message || "Failed to add favorite");
+    }
+
+    checkUserStatus();
+    fetchRecipes();
+  </script>
+</main>
+{{template "footer.html" .}}
