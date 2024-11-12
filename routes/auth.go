@@ -18,6 +18,8 @@ func SetupAuthRoutes() {
 	http.HandleFunc("/register", RegisterPageHandler)
 	http.HandleFunc("/login", LoginPageHandler)
 	http.HandleFunc("/about", AboutPageHandler)
+	http.HandleFunc("/random_recipe", RandomRecipePageHandler)
+
 	//handle and serve JSON data
 	http.HandleFunc("/api/register", AddUserHandler)
 	http.HandleFunc("/api/login", LoginHandler)
@@ -58,6 +60,21 @@ func RegisterPageHandler(w http.ResponseWriter, r *http.Request) {
 func AboutPageHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		tmpl, err := template.ParseFiles("templates/about.html", "templates/header.html", "templates/footer.html")
+		if err != nil {
+			http.Error(w, "Error loading template", http.StatusInternalServerError)
+			return
+		}
+		tmpl.Execute(w, nil)
+		return
+	}
+
+	http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+}
+
+// handle routing for the random_recipe page routing
+func RandomRecipePageHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		tmpl, err := template.ParseFiles("templates/random_recipe.html", "templates/header.html", "templates/footer.html")
 		if err != nil {
 			http.Error(w, "Error loading template", http.StatusInternalServerError)
 			return
