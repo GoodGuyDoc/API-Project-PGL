@@ -6,8 +6,7 @@
 }
 
 /* Full-height layout */
-html,
-body {
+html, body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -15,8 +14,8 @@ body {
 
 /* Body styling */
 body {
-  font-family: "Arial", sans-serif;
-  background-color: #e9e9e9;
+  font-family: 'Arial', sans-serif;
+  background-color: #E9E9E9;
   color: #333;
   display: flex;
   flex-direction: column;
@@ -25,6 +24,7 @@ body {
 /* Navigation bar styling */
 .navbar {
   background-color: #567568;
+  overflow: hidden;
   padding: 10px 0;
 }
 
@@ -42,7 +42,7 @@ body {
 }
 
 .navbar a.active {
-  background-color: #593d3b;
+  background-color: #4CAF50;
   color: white;
 }
 
@@ -53,7 +53,6 @@ main {
   justify-content: center;
   align-items: center;
   padding: 20px;
-  flex-direction: column;
 }
 
 .content-wrapper {
@@ -162,7 +161,6 @@ footer {
   margin-top: 0.75rem;
   color: #567568;
   font-size: 0.9rem;
-  text-align: center;
 }
 
 /* Form styling */
@@ -201,8 +199,7 @@ form button {
 }
 
 /* Profile content styling */
-#profile-content,
-#favorites-content {
+#profile-content, #favorites-content {
   margin-top: 30px;
   text-align: left;
 }
@@ -223,33 +220,4 @@ form button {
   border-radius: 5px;
   margin-right: 15px;
   vertical-align: middle;
-}
-/* formatting h2 on index page */
-#example-title {
-  margin: 15px;
-  color: #666;
-}
-
-/* formatting h1 for getting started text */
-#get-started {
-  font-size: 1em;
-  color: #666;
-  text-align: center;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  font-size: 24px;
-}
-
-/* formatting for get started button on home page */
-#get-started-button {
-  background-color: #567568;
-  color: white;
-  font-size: 1.5em;
-  width: 100%;
-  max-width: 300px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  text-align: center;
-  transition: background-color 0.3s ease, transform 0.3s ease;
 }
