@@ -23,7 +23,6 @@ func RecipeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Fetching random recipes...")
 	recipes, err := api.GetRandomRecipes(5) //get 5 random recipes
 	if err != nil {
-		fmt.Println(err)
 		w.Header().Set("Content-Type", "application/json")
 		http.Error(w, `{"error": "Failed to get random recipes"}`, http.StatusInternalServerError)
 		return
