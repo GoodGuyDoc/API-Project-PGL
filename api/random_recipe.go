@@ -3,9 +3,8 @@ package api
 import (
 	"fmt"
 	"os"
-	"testing"
-
 	"strings"
+	"testing"
 )
 
 const API_KEY = "a867e9b240a645c3a08192f8d6b8b61c"
@@ -59,10 +58,6 @@ func GetRandomRecipesByTag(count int, tags []string) ([]Recipe, error) {
 	return recipeResponse.Recipes, nil
 }
 
-
-
-
-
 // logToFile writes data to a file.
 func logToFile(filename string, data []byte) error {
 	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -85,18 +80,15 @@ func logToFile(filename string, data []byte) error {
 	return nil
 }
 
-func TestRandomRecipeCall(t *testing.T)([]Recipe recipe, error err){
-
-	recipe,err := GetRandomRecipes(1)
+func TestRandomRecipeCall(t *testing.T) {
+	_, err := GetRandomRecipes(1)
 	if err != nil {
-		t.Fail()
+		t.Errorf("There was an error in random recipe testing ERROR: %v", err)
+	} else {
+		t.Log("RandomRecipe Call Successful.")
 	}
-	else{
-		fmt.Println("RandomRecipe Call Successful.")
-	}
-	return recipe, err
+	return nil
 }
-
 
 func TestLogToFile(t *testing.T) {
 	// Create a temporary directory for test files
@@ -105,7 +97,7 @@ func TestLogToFile(t *testing.T) {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
 	defer os.RemoveAll(tmpDir)
-    //Create a test struct
+	//Create a test struct
 	tests := []struct {
 		name        string
 		data        []byte

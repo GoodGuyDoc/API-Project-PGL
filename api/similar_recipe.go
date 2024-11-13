@@ -15,9 +15,9 @@ func GetSimilarRecipe(recipeId int) ([]Recipe, error) {
 	return recipeResponse.Recipes, nil
 }
 
-TestSimilarRecipe(t *testing.T)(error,[]Recipe recipe){
+func TestSimilarRecipe(t *testing.T)(error,[]Recipe recipe){
 	//Random Similar Recipe call just for testing
-	var err := nil
+	var err = nil
 	recipe,err := GetSimilarRecipe(122)
 	if err != nil{
 		t.Fatal()
