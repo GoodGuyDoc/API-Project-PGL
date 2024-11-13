@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"testing"
 )
 
 // Takes an apiString input to call, then returns a *RecipeResponse, or an error
@@ -95,4 +96,12 @@ func getRecipe(apiString string) (*Recipe, error) {
 	}
 
 	return &recipe, nil
+}
+
+func TestApiCall(apiString string, t *testing.T) {
+	var retStr = ""
+	res, retStr := send_api_call(apiString)
+	if retStr != "" {
+		t.Fatalf(retStr)
+	}
 }
