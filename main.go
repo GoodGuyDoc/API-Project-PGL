@@ -9,8 +9,7 @@ import (
 	"testing"
 )
 
-func setupServer() (bool,error) {
-	error err := nil
+func setupServer() (bool, error) {
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 	fmt.Println("Server is running on http://localhost:8080")
@@ -20,7 +19,7 @@ func setupServer() (bool,error) {
 
 func main() {
 	// Initialize the database connection
-	err := d>b.InitDB()
+	err := d > b.InitDB()
 	if err != nil {
 		log.Fatalf("Failed to connect to the database: %v", err)
 	}
@@ -35,10 +34,9 @@ func main() {
 	// Set up static file server
 }
 
-
-func TestSetupServer(t *testing.T){
-	bool isFailed := setupServer()
-	if isFailed{
+func TestSetupServer(t *testing.T) {
+	var isFailed, _ = setupServer()
+	if isFailed {
 		t.Fatalf("Test Setup failed. No other aspects of the program can continue...")
 	}
 }
