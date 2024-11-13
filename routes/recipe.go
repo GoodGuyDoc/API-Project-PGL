@@ -16,6 +16,7 @@ func SetupRecipeRoutes() {
 	http.HandleFunc("/api/recipe/", RecipeDetailHandler)
 	http.HandleFunc("/recipe/", RecipeDetailPageHandler)
 	http.HandleFunc("/api/convert", ConversionHandler)
+	http.HandleFunc("/random_recipe_page", RandomRecipePageHandler)
 }
 
 // RecipeHandler fetches random recipes and serves them as JSON back to the frontend.
@@ -116,4 +117,13 @@ func ConversionHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(conversionInfo)
+}
+func RandomRecipePageHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.ParseFiles("templates/random_recipe_page.html", "templates/header.html", "templates/footer.html")
+	if err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		http.Error(w, `{"error": "Error loading template"}`, http.StatusInternalServerError)
+		return
+	}
+	tmpl.Execute(w, nil)
 }

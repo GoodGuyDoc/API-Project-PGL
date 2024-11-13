@@ -6,7 +6,8 @@
 }
 
 /* Full-height layout */
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -14,8 +15,8 @@ html, body {
 
 /* Body styling */
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #E9E9E9;
+  font-family: "Arial", sans-serif;
+  background-color: #e9e9e9;
   color: #333;
   display: flex;
   flex-direction: column;
@@ -42,7 +43,7 @@ body {
 }
 
 .navbar a.active {
-  background-color: #4CAF50;
+  background-color: #60463b;
   color: white;
 }
 
@@ -161,6 +162,7 @@ footer {
   margin-top: 0.75rem;
   color: #567568;
   font-size: 0.9rem;
+  text-align: center;
 }
 
 /* Form styling */
@@ -199,7 +201,8 @@ form button {
 }
 
 /* Profile content styling */
-#profile-content, #favorites-content {
+#profile-content,
+#favorites-content {
   margin-top: 30px;
   text-align: left;
 }
