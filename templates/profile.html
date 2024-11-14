@@ -1,110 +1,113 @@
 {{template "header.html" "styles.css"}}
-<link rel="stylesheet" href="nav-styles.css">
-<nav class="navbar">
-  <a href="/">Home</a>
-  <a href="/profile" class="active">Profile</a>
-  <a href="#" onclick="logout()">Logout</a>
-</nav>
-<main>
-    <h1>Your Profile</h1>
-    <div id="error-message" role="alert" aria-live="assertive"></div>
-    <div id="loading" aria-hidden="true">Loading...</div>
-    <section id="profile-content"></section>
-    <section id="favorites-content"></section>
-
-    <script>
-        const errorMessage = "{{.ErrorMessage}}";
-        const loadingElement = document.getElementById('loading');
-        const errorElement = document.getElementById('error-message');
-        const profileContent = document.getElementById('profile-content');
-        const favoritesContent = document.getElementById('favorites-content');
-
-        if (errorMessage) {
-            errorElement.textContent = errorMessage;
-        } else {
-            fetchUserProfile();
-        }
-
-        async function fetchUserProfile() {
-            loadingElement.removeAttribute('aria-hidden');
-            try {
-                const response = await fetch('/api/profile');
-                if (response.ok) {
-                    const profile = await response.json();
-                    displayProfile(profile);
-                    displayFavorites(profile.Recipes);
-                } else {
-                    throw new Error('Failed to load profile data');
-                }
-            } catch (error) {
-                errorElement.textContent = error.message;
-            } finally {
-                loadingElement.setAttribute('aria-hidden', 'true');
-            }
-        }
-
-        function displayProfile(profile) {
-            profileContent.innerHTML = `
-                <h2>Profile Information</h2>
-                <p><strong>First Name:</strong> ${profile.FirstName}</p>
-                <p><strong>Username:</strong> ${profile.Username}</p>
-            `;
-        }
-
-        function displayFavorites(recipes) {
-            if (recipes && recipes.length > 0) {
-                favoritesContent.innerHTML = `
-                    <h2>Your Favorite Recipes</h2>
-                    <ul class="favorites-list">
-                        ${recipes.map(recipe => `
-                            <li>
-                                <a href="/recipe/${recipe.RecipeID}">
-                                    <img src="${recipe.Image}" alt="${recipe.Title}" style="max-width: 100px;">
-                                    ${recipe.Title}
-                                </a>
-                                <p>Added on: ${new Date(recipe.AddedAt).toLocaleDateString()}</p>
-                                <button onclick="removeFromFavorites(${recipe.RecipeID})">Remove</button>
-                            </li>
-                        `).join('')}
-                    </ul>
-                `;
-            } else {
-                favoritesContent.innerHTML = `<p>You have no favorite recipes yet.</p>`;
-            }
-        }
-
-        async function logout() {
-            try {
-                const response = await fetch('/api/logout', {
-                    method: 'POST',
-                });
-
-                if (response.ok) {
-                    alert('Logged out successfully');
-                    window.location.href = '/login';
-                } else {
-                    throw new Error('Failed to log out');
-                }
-            } catch (error) {
-                alert(error.message);
-            }
-        }
-
-        async function removeFromFavorites(recipeId) {
-            try {
-                const response = await fetch(`/api/remove-favorite/${recipeId}`, {
-                    method: 'POST',
-                });
-
-                if (response.ok) {
-                    fetchUserProfile();
-                } else {
-                    throw new Error('Failed to remove from favorites');
-                }
-            } catch (error) {
-                alert(error.message);
-            }
-        }
-    </script>
+<main class="profile-page">
+    <div class="content-wrapper">
+        <h1>Your Profile</h1>
+        <div id="error-message" role="alert" aria-live="assertive"></div>
+        <div id="loading" aria-hidden="true">Loading...</div>
+        
+        <div class="profile-container">
+            <section id="profile-content" class="profile-section">
+                <div class="profile-header">
+                    <img id="profile-picture" src="/static/default-profile.png" alt="Profile picture">
+                </div>
+                <div class="profile-info"></div>
+            </section>
+            <section id="favorites-content" class="profile-section"></section>
+        </div>
+    </div>
 </main>
+
+<script>
+    const errorMessage = "{{.ErrorMessage}}";
+    const loadingElement = document.getElementById('loading');
+    const errorElement = document.getElementById('error-message');
+    const profileContent = document.getElementById('profile-content');
+    const favoritesContent = document.getElementById('favorites-content');
+    const profilePicture = document.getElementById('profile-picture');
+
+    if (errorMessage) {
+        errorElement.textContent = errorMessage;
+    } else {
+        fetchUserProfile();
+    }
+
+    async function fetchUserProfile() {
+        loadingElement.removeAttribute('aria-hidden');
+        try {
+            const response = await fetch('/api/profile');
+            if (response.ok) {
+                const profile = await response.json();
+                displayProfile(profile);
+                displayFavorites(profile.Recipes);
+            } else {
+                throw new Error('Failed to load profile data');
+            }
+        } catch (error) {
+            errorElement.textContent = error.message;
+        } finally {
+            loadingElement.setAttribute('aria-hidden', 'true');
+        }
+    }
+
+    function displayProfile(profile) {
+        if (profile.ImageURL) {
+            profilePicture.src = profile.ImageURL;
+        }
+        
+        const profileInfo = profileContent.querySelector('.profile-info');
+        profileInfo.innerHTML = `
+            <h2>Profile Information</h2>
+            <p><strong>First Name:</strong> ${profile.FirstName}</p>
+            <p><strong>Username:</strong> ${profile.Username}</p>
+            <button onclick="logout()" class="logout-btn">Logout</button>
+        `;
+    }
+
+    function displayFavorites(recipes) {
+        if (recipes && recipes.length > 0) {
+            favoritesContent.innerHTML = `
+                <h2>Your Favorite Recipes</h2>
+                <div class="favorites-grid">
+                    ${recipes.map(recipe => `
+                        <div class="favorite-item">
+                            <img src="${recipe.Image}" alt="${recipe.Title}">
+                            <h3>${recipe.Title}</h3>
+                            <p>Added on: ${new Date(recipe.AddedAt).toLocaleDateString()}</p>
+                            <button onclick="removeFromFavorites(${recipe.RecipeID})">Remove</button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else {
+            favoritesContent.innerHTML = `<p class="no-favorites">You have no favorite recipes yet.</p>`;
+        }
+    }
+
+    async function logout() {
+        try {
+            const response = await fetch('/api/logout', { method: 'POST' });
+            if (response.ok) {
+                window.location.href = '/login';
+            } else {
+                throw new Error('Failed to log out');
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    async function removeFromFavorites(recipeId) {
+        try {
+            const response = await fetch(`/api/remove-favorite/${recipeId}`, { method: 'POST' });
+            if (response.ok) {
+                fetchUserProfile();
+            } else {
+                throw new Error('Failed to remove from favorites');
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+</script>
+
 {{template "footer.html" .}}
