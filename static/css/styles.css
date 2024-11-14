@@ -224,3 +224,60 @@ form button {
   margin-right: 15px;
   vertical-align: middle;
 }
+
+/* Profile page specific styles */
+.profile-page {
+  background-color: #f9f9f9;
+  padding: 40px 0;
+}
+
+.profile-page .content-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.profile-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#profile-picture {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #567568;
+}
+
+.profile-info h2 {
+  margin-bottom: 15px;
+}
+
+.profile-info p {
+  margin-bottom: 10px;
+}
+
+.logout-btn {
+  margin-top: 20px;
+  background-color: #d9534f;
+}
+
+.logout-btn:hover {
+  background-color: #c9302c;
+}
