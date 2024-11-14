@@ -80,33 +80,13 @@ func logToFile(filename string, data []byte) error {
 	return nil
 }
 
-func TestRandomRecipeCall(t *testing.T) {
+func TestRandomRecipeCall(t *testing.T) error {
 	_, err := GetRandomRecipes(1)
 	if err != nil {
 		t.Errorf("There was an error in random recipe testing ERROR: %v", err)
+		return err
 	} else {
 		t.Log("RandomRecipe Call Successful.")
 	}
 	return nil
-}
-
-func TestLogToFile(t *testing.T) {
-	// Create a temporary directory for test files
-	tmpDir, err := os.MkdirTemp("", "recipe-test-*")
-	if err != nil {
-		t.Fatalf("Failed to create temp dir: %v", err)
-	}
-	defer os.RemoveAll(tmpDir)
-	//Create a test struct
-	tests := []struct {
-		name        string
-		data        []byte
-		expectError bool
-	}{
-		{
-			name:        "successful_write",
-			data:        []byte("test data"),
-			expectError: false,
-		},
-	}
 }

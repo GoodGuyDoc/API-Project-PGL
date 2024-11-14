@@ -9,12 +9,12 @@ import (
 	"testing"
 )
 
-func setupServer() (bool, error) {
+func setupServer() error {
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 	fmt.Println("Server is running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
-	return true
+	return nil
 }
 
 func main() {

@@ -100,7 +100,7 @@ func getRecipe(apiString string) (*Recipe, error) {
 
 func TestApiCall(apiString string, t *testing.T) {
 	var retStr = ""
-	res, retStr := send_api_call(apiString)
+	_, retStr = send_api_call(apiString)
 	if retStr != "" {
 		t.Fatalf(retStr)
 	}
