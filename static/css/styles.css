@@ -349,51 +349,51 @@ form button {
 
 /* Login Page Styles */
 .login-container {
-  background-color: #ffffff; /* White background for the form */
-  padding: 40px; /* Padding around the container */
-  border-radius: 12px; /* Rounded corners */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  max-width: 400px; /* Limit width for better readability */
-  margin: auto; /* Center the container */
-  text-align: center; /* Center text inside the container */
+  background-color: #ffffff; 
+  padding: 40px;
+  border-radius: 12px; 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 400px; 
+  margin: auto; 
+  text-align: center; 
 }
 
 h1 {
-  font-size: 2rem; /* Font size for the heading */
-  color: #567568; /* Heading color */
-  margin-bottom: 20px; /* Space below heading */
+  font-size: 2rem; 
+  color: #567568; 
+  margin-bottom: 20px; 
 }
 
 form {
   display: flex;
-  flex-direction: column; /* Stack inputs vertically */
-  gap: 15px; /* Space between form elements */
+  flex-direction: column; 
+  gap: 15px; 
 }
 
 label {
-  text-align: left; /* Align labels to the left */
+  text-align: left; 
 }
 
 input[type="text"],
 input[type="password"] {
-  width: 100%; /* Full width inputs */
-  padding: 10px; /* Padding inside inputs */
-  border: 1px solid #ccc; /* Border for inputs */
-  border-radius: 5px; /* Rounded corners for inputs */
+  width: 100%;
+  padding: 10px; 
+  border: 1px solid #ccc; 
+  border-radius: 5px; 
 }
 
 button {
-  padding: 10px; /* Padding inside button */
-  background-color: #567568; /* Button color */
-  color: white; /* Button text color */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Rounded corners for button */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.3s ease; /* Smooth transition on hover */
+  padding: 10px; 
+  background-color: #567568; 
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
 }
 
 button:hover {
-  background-color: #405b58; /* Darker button color on hover */
+  background-color: #405b58; /
 }
 
 #message {
@@ -401,11 +401,69 @@ button:hover {
   font-weight: bold;
 }
 
-/* Link styling */
 a {
-  color: #567568; /* Link color matching the theme */
+  color: #567568; 
 }
 
 a:hover {
-  text-decoration: underline; /* Underline links on hover */
+  text-decoration: underline; 
+}
+
+/* Register Page Styles */
+.register-container {
+  background-color: #ffffff; 
+  padding: 40px; 
+  border-radius: 12px; 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
+  max-width: 400px; 
+  margin: auto; 
+  text-align: center; 
+}
+
+h1 {
+  font-size: 2rem; 
+  color: #567568; 
+  margin-bottom: 20px; 
+}
+
+form {
+  display: flex;
+  flex-direction: column; 
+  gap: 15px; 
+}
+
+label {
+  text-align: left; 
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%; 
+  padding: 10px; 
+  border: 1px solid #ccc; 
+  border-radius: 5px; 
+}
+
+button {
+  padding: 10px; 
+  background-color: #567568; 
+  color: white; 
+  border: none; 
+  border-radius: 5px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #405b58; 
+}
+
+#message {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+
+a:hover {
+  text-decoration: underline; 
 }
