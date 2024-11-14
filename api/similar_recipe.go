@@ -3,7 +3,6 @@ package api
 import (
 	"fmt"
 	"testing"
-	"testing"
 )
 
 func GetSimilarRecipe(recipeId int) ([]Recipe, error) {
@@ -16,13 +15,12 @@ func GetSimilarRecipe(recipeId int) ([]Recipe, error) {
 	return recipeResponse.Recipes, nil
 }
 
-func TestSimilarRecipe(t *testing.T)(error,[]Recipe recipe){
+func TestSimilarRecipe(t *testing.T) error {
 	//Random Similar Recipe call just for testing
-	var err = nil
-	recipe,err := GetSimilarRecipe(122)
-	if err != nil{
-		t.Fatal()
+	_, err := GetSimilarRecipe(122)
+	if err != nil {
+		t.Errorf("There was an error grabbing similar recipe %v", err)
+		return err
 	}
-	return recipe,err
+	return nil
 }
-

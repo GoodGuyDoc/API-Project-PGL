@@ -84,7 +84,7 @@ func getRecipe(apiString string) (*Recipe, error) {
 	}
 
 	// Log the formatted JSON to a file named response_log.txt
-	err = logToFile("response_log.txt", indentedJSON)
+	err = logToFile("response_log.txt", indentedJSON) //TODO fix this with the new log format
 	if err != nil {
 		return nil, fmt.Errorf("error logging to file: %w", err)
 	}

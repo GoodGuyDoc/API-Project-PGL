@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"path/filepath"
 )
 
 const API_KEY = "a867e9b240a645c3a08192f8d6b8b61c"
@@ -25,10 +26,7 @@ type Ingredient struct {
 	Original string `json:"original"`
 }
 
-type AnalyzedInstruction struct {
-	Name  string `json:"name"`
-	Steps []Step `json:"steps"`
-}
+type AnalyzedInstrucioutil
 
 type Step struct {
 	Number int    `json:"number"`
@@ -59,8 +57,9 @@ func GetRandomRecipesByTag(count int, tags []string) ([]Recipe, error) {
 }
 
 // logToFile writes data to a file.
-func logToFile(filename string, data []byte) error {
-	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+func logToFile(filename os.File, data []byte) error {
+	file = os.Open(filepath.Abs(filename)) //Open the filepath
+	//file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644) this is an odd way of doing this????
 	if err != nil {
 		return fmt.Errorf("error opening file: %w", err)
 	}
@@ -87,6 +86,20 @@ func TestRandomRecipeCall(t *testing.T) error {
 		return err
 	} else {
 		t.Log("RandomRecipe Call Successful.")
+	}
+	return nil
+}
+
+
+func TestLogToFile(t *testing.T){
+	tempFile,err := os.CreateTemp("./test","testlogfile*") //Create the temp file
+	if err != nil{
+		t.Errorf("There was an error when creating the testing tempFile: %v",err)
+	}
+	err := logToFile(*tempFile)
+	if err != nil{
+		t.Errorf("There was an error while testing file logging %v",err)
+		return 
 	}
 	return nil
 }
