@@ -285,64 +285,64 @@ form button {
 /* About page specific styles */    
 .about-page {    
   background-color:#f9f9f9 ;    
-  padding:px40
+  padding: 40px;
 }    
 .about-page .content-wrapper {    
-  max-width:px800 ;    
-  margin:auto ;    
-  background-color:#ffffff ;    
-  padding:px40 ;    
-  border-radius:px8 ;    
+  max-width: 800px;    
+  margin: auto;    
+  background-color:#ffffff;    
+  padding: 40px;    
+  border-radius: 8px;    
   box-shadow:.04s rgba(0,0,0,.1)    
 }    
 .about-page h1 {    
-  color:#567568 ;    
-  text-align:center ;    
-  margin-bottom:px30
+  color:#567568;    
+  text-align: center;    
+  margin-bottom: 30px;
 }    
 .about-page h2 {    
   color:#405b58 ;    
-  margin-top:px30 ;    
-  margin-bottom:px15
+  margin-top: 30px;    
+  margin-bottom: 15px;
 }    
 .about-page p {    
-  line-height:px1.6 ;    
+  line-height: 1.6px;    
   color:#333
 }   
 .offerings-grid {   
   display:grid ;   
-  grid-template-columns:auto-fit repeat(minmax(px200 ,1fr)) ;   
-  gap:px20 ;   
-  margin-top:px20
+  grid-template-columns:auto-fit repeat(minmax(200px ,1fr)) ;   
+  gap: 20px;   
+  margin-top: 20px;
 }   
 .offering-item {   
-  text-align:center ;   
-  padding:px20 ;   
-  background-color:#f0f5f4 ;   
-  border-radius:px8 ;   
-  transition:.3s ease
+  text-align: center;   
+  padding: 20px;   
+  background-color:#f0f5f4;   
+  border-radius: 8px;   
+  transition:.3s ease;
 }   
 .offering-item:hover {   
-   transform:-translateY(px5)
+   transform:-translateY(px5);
 }   
 .offering-item i {   
-   font-size:px2rem ;   
-   color:#567568 ;   
-   margin-bottom:px10
+   font-size: 2rem;   
+   color:#567568;   
+   margin-bottom: 10px;
 }   
 .offering-item h3 {   
-   color:#405b58 ;   
-   margin-bottom:px10
+   color:#405b58;   
+   margin-bottom: 10px;
 }   
 .contact {   
    text-align:center ;   
-   margin-top:px40
+   margin-top: 40px;
 }   
 .contact a {   
-   color:#567568 ;   
-   text-decoration:none ;   
-   font-weight:bold
+   color:#567568;   
+   text-decoration: none;   
+   font-weight: bold;
 }   
 .contact a:hover {   
-   text-decoration:inline
+   text-decoration:inline;
 }
