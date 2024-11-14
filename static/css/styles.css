@@ -281,3 +281,68 @@ form button {
 .logout-btn:hover {
   background-color: #c9302c;
 }
+
+/* About page specific styles */    
+.about-page {    
+  background-color:#f9f9f9 ;    
+  padding:px40
+}    
+.about-page .content-wrapper {    
+  max-width:px800 ;    
+  margin:auto ;    
+  background-color:#ffffff ;    
+  padding:px40 ;    
+  border-radius:px8 ;    
+  box-shadow:.04s rgba(0,0,0,.1)    
+}    
+.about-page h1 {    
+  color:#567568 ;    
+  text-align:center ;    
+  margin-bottom:px30
+}    
+.about-page h2 {    
+  color:#405b58 ;    
+  margin-top:px30 ;    
+  margin-bottom:px15
+}    
+.about-page p {    
+  line-height:px1.6 ;    
+  color:#333
+}   
+.offerings-grid {   
+  display:grid ;   
+  grid-template-columns:auto-fit repeat(minmax(px200 ,1fr)) ;   
+  gap:px20 ;   
+  margin-top:px20
+}   
+.offering-item {   
+  text-align:center ;   
+  padding:px20 ;   
+  background-color:#f0f5f4 ;   
+  border-radius:px8 ;   
+  transition:.3s ease
+}   
+.offering-item:hover {   
+   transform:-translateY(px5)
+}   
+.offering-item i {   
+   font-size:px2rem ;   
+   color:#567568 ;   
+   margin-bottom:px10
+}   
+.offering-item h3 {   
+   color:#405b58 ;   
+   margin-bottom:px10
+}   
+.contact {   
+   text-align:center ;   
+   margin-top:px40
+}   
+.contact a {   
+   color:#567568 ;   
+   text-decoration:none ;   
+   font-weight:bold
+}   
+.contact a:hover {   
+   text-decoration:inline
+}
