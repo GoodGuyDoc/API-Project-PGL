@@ -1,10 +1,5 @@
 {{template "header.html" "styles.css"}}
 <link rel="stylesheet" href="nav-styles.css">
-<nav class="navbar">
-  <a href="/">Home</a>
-  <a href="/profile">Profile</a>
-  <a href="#" onclick="logout()">Logout</a>
-</nav>
 <main>
     <h1>Login Successful!</h1>
     <p>Welcome{{if .UserName}}, {{.UserName}}{{end}}! You are now logged in.</p>
