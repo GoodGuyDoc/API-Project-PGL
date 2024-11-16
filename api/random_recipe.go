@@ -3,9 +3,9 @@ package api
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
-	"path/filepath"
 )
 
 const API_KEY = "a867e9b240a645c3a08192f8d6b8b61c"
@@ -26,7 +26,10 @@ type Ingredient struct {
 	Original string `json:"original"`
 }
 
-type AnalyzedInstrucioutil
+type AnalyzedInstruction struct {
+	Name  string `json:"name"`
+	Steps []Step `json:"steps"`
+}
 
 type Step struct {
 	Number int    `json:"number"`
@@ -57,9 +60,9 @@ func GetRandomRecipesByTag(count int, tags []string) ([]Recipe, error) {
 }
 
 // logToFile writes data to a file.
-func logToFile(filename os.File, data []byte) error {
-	file = os.Open(filepath.Abs(filename)) //Open the filepath
-	//file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644) this is an odd way of doing this????
+func logToFile(filename string, data []byte) error {
+
+	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return fmt.Errorf("error opening file: %w", err)
 	}
@@ -79,27 +82,27 @@ func logToFile(filename os.File, data []byte) error {
 	return nil
 }
 
-func TestRandomRecipeCall(t *testing.T) error {
-	_, err := GetRandomRecipes(1)
+func TestRandomRecipeCall(t *testing.T) {
+	_, err := GetRandomRecipes(100)
 	if err != nil {
 		t.Errorf("There was an error in random recipe testing ERROR: %v", err)
-		return err
 	} else {
 		t.Log("RandomRecipe Call Successful.")
 	}
-	return nil
 }
 
-
-func TestLogToFile(t *testing.T){
-	tempFile,err := os.CreateTemp("./test","testlogfile*") //Create the temp file
-	if err != nil{
-		t.Errorf("There was an error when creating the testing tempFile: %v",err)
+func TestLogToFile(t *testing.T) {
+	tempFile, err := os.CreateTemp("./test", "testlogfile*") //Create the temp file
+	if err != nil {
+		t.Errorf("There was an error when creating the testing tempFile: %v", err)
 	}
-	err := logToFile(*tempFile)
-	if err != nil{
-		t.Errorf("There was an error while testing file logging %v",err)
-		return 
+	defer func() {
+		tempFile.Close()
+		os.Remove(tempFile.Name())
+	}()
+	fileAbs, err := filepath.Abs(tempFile.Name())
+	err = logToFile(fileAbs, []byte("Hello World!"))
+	if err != nil {
+		t.Errorf("There was an error while testing file logging %v", err)
 	}
-	return nil
 }
