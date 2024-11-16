@@ -19,7 +19,7 @@ func setupServer() error {
 
 func main() {
 	// Initialize the database connection
-	err := d.InitDB()
+	err := db.InitDB()
 	if err != nil {
 		log.Fatalf("Failed to connect to the database: %v", err)
 	}
