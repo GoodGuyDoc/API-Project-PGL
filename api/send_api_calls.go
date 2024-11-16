@@ -37,8 +37,7 @@ func getRecipeResponse(apiString string) (*RecipeResponse, error) {
 	}
 
 	// Log the formatted JSON to a file named response_log.txt
-	file, err := os.Create("response_log.txt")
-	err = logToFile(file.Name(), indentedJSON)
+	err = logToFile("response_log.txt", indentedJSON)
 	if err != nil {
 		return nil, fmt.Errorf("error logging to file: %w", err)
 	}
