@@ -23,7 +23,7 @@ func ConvertAmount(ingredientName string, amount float64, unit string, convertTo
 		apiUrl := fmt.Sprintf("https://api.spoonacular.com/convert?apiKey=%s&ingredientName=%s&sourceAmount=%.2f&sourceUnit=%s&targetUnit=%s", API_KEY[i], ingredientName, amount, unit, convertToUnit)
 		resp, err = http.Get(apiUrl)
 
-		if err.Error() == "this api key is ratelimited" {
+		if err != nil && err.Error() == "this api key is ratelimited" {
 			continue
 		} else {
 			break

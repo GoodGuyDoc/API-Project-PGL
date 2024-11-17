@@ -13,7 +13,7 @@ func GetRecipeByID(recipeID string) (*Recipe, error) {
 		apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/%s/information?apiKey=%s", recipeID, API_KEY[i])
 		recipe, err = getRecipe(apiUrl)
 
-		if err.Error() == "this api key is ratelimited" {
+		if err != nil && err.Error() == "this api key is ratelimited" {
 			continue
 		} else {
 			break

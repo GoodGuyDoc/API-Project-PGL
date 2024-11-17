@@ -42,12 +42,13 @@ func GetRandomRecipes(count int) ([]Recipe, error) {
 		apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/random?apiKey=%s&number=%d", API_KEY[i], count)
 		recipeResponse, err = getRecipeResponse(apiUrl)
 
-		if err.Error() == "this api key is ratelimited" {
+		if err != nil && err.Error() == "this api key is ratelimited" {
 			continue
 		} else {
 			break
 		}
 	}
+	fmt.Printf("success")
 
 	if err != nil {
 		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
