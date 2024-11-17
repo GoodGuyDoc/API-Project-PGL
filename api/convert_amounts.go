@@ -16,8 +16,20 @@ type ConversionInformation struct {
 }
 
 func ConvertAmount(ingredientName string, amount float64, unit string, convertToUnit string) (*ConversionInformation, error) {
-	apiUrl := fmt.Sprintf("https://api.spoonacular.com/convert?apiKey=%s&ingredientName=%s&sourceAmount=%.2f&sourceUnit=%s&targetUnit=%s", API_KEY, ingredientName, amount, unit, convertToUnit)
-	resp, err := http.Get(apiUrl)
+	var resp *http.Response
+	var err error
+
+	for i := 0; i < 3; i++ {
+		apiUrl := fmt.Sprintf("https://api.spoonacular.com/convert?apiKey=%s&ingredientName=%s&sourceAmount=%.2f&sourceUnit=%s&targetUnit=%s", API_KEY[i], ingredientName, amount, unit, convertToUnit)
+		resp, err = http.Get(apiUrl)
+
+		if err.Error() == "this api key is ratelimited" {
+			continue
+		} else {
+			break
+		}
+
+	}
 	if err != nil {
 		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
 	}
