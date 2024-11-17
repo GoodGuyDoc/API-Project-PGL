@@ -3,7 +3,6 @@ package api
 import (
 	"fmt"
 	"os"
-	"strings"
 )
 
 type RecipeResponse struct {
@@ -48,7 +47,6 @@ func GetRandomRecipes(count int) ([]Recipe, error) {
 			break
 		}
 	}
-	fmt.Printf("success")
 
 	if err != nil {
 		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
@@ -58,14 +56,18 @@ func GetRandomRecipes(count int) ([]Recipe, error) {
 }
 
 // Returns count amount of random recipes from spoonacular api that are tagged with the specified tags
-func GetRandomRecipesByTag(count int, tags []string) ([]Recipe, error) {
-	includeTags := strings.Join(tags, ",")
-	apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/random?apiKey=%s&number=%d&include-tags=%s", API_KEY[0], count, includeTags)
+func GetRandomRecipesByTag(count int, includeTags string, excludeTags string) ([]Recipe, error) {
+	apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/random?apiKey=%s&number=%d&include-tags=%s&exclude-tags=%s", API_KEY[0], count, includeTags, excludeTags)
 	recipeResponse, err := getRecipeResponse(apiUrl)
 	if err != nil {
-		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
+		if err.Error() == "no recipes found" {
+			return []Recipe{}, nil // return empty struct
+		} else {
+			return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
+		}
 	}
 
+	fmt.Printf("tags for inclusion: %s", includeTags)
 	return recipeResponse.Recipes, nil
 }
 
