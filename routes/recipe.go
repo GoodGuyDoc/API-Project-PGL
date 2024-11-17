@@ -13,7 +13,7 @@ func SetupRecipeRoutes() {
 	http.HandleFunc("/api/recipes", RecipeHandler)
 	http.HandleFunc("/api/recipes/byTag", RecipeByTagHandler)
 	http.HandleFunc("/api/recipe/", RecipeDetailHandler)
-	http.HandleFunc("/recipe_detail", RecipeDetailPageHandler)
+	http.HandleFunc("/recipe_detail/", RecipeDetailPageHandler)
 	http.HandleFunc("/api/convert", ConversionHandler)
 	http.HandleFunc("/api/similarRecipe/", SimilarRecipeHandler)
 	http.HandleFunc("/random_recipe_page", RandomRecipePageHandler)
@@ -74,7 +74,7 @@ func RecipeDetailPageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	recipeID := r.URL.Path[len("/recipe/"):] // Extract the recipe ID from the URL.
+	recipeID := r.URL.Path[len("/recipe_detail/"):] // Extract the recipe ID from the URL.
 	tmpl.Execute(w, map[string]string{"RecipeID": recipeID})
 }
 

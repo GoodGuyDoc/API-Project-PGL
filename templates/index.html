@@ -1,54 +1,62 @@
 {{template "header.html" "styles.css"}}
 <link rel="stylesheet" href="nav-styles.css">
 <nav class="navbar">
-  <a href="/" class="active">Home</a>
-  <a href="/login">Login</a>
-  <a href="/register">Register</a>
-  <a href="/profile">Profile</a>
+ <a href="/" class="active">Home</a>
+ <a href="/login">Login</a>
+ <a href="/register">Register</a>
+ <a href="/profile">Profile</a>
+ <a href="/about">About</a>
 </nav>
 <main>
-    <div class="content-wrapper">
-        <h1>Welcome to Golang Grub</h1>
-        <p>Generate a random recipe, save your favorites, and more.</p>
-        <div id="user-info"></div>
-        <h1 id="get-started">Ready to Generate a Random Recipe? Click the Button Below!</h1>
-        <div>
-            <a href="/random_recipe_page"><button id="get-started-button" style="width: 50%;">Get Started</button></a>
-    <div id="content"></div>
-    </div>
+   <div class="content-wrapper">
+       <h1>Welcome to Golang Grub</h1>
+       <p>Generate a random recipe, save your favorites, and more.</p>
+       <div id="user-info"></div>
+       <h1 id="get-started">Ready to Generate a Random Recipe? Click the Button Below!</h1>
+       <div>
+           <a href="/random_recipe_page"><button id="get-started-button" style="width: 50%;">Get Started</button></a>
+   <div id="content"></div>
+   </div>
 
-    <script>
-        async function checkUserStatus() {
-            const response = await fetch('/api/profile');
-            const userInfo = document.getElementById('user-info');
 
-            if (response.ok) {
-                const profile = await response.json();
-                userInfo.innerHTML = `
-                    <p>Welcome, ${profile.FirstName}!</p>
-                    <button onclick="logout()">Logout</button>
-                `;
-            } else {
-                userInfo.innerHTML = `
-                    <a href="/register">Register</a> | <a href="/login">Login</a>
-                `;
-            }
-        }
+   <script>
+       async function checkUserStatus() {
+           const response = await fetch('/api/profile');
+           const userInfo = document.getElementById('user-info');
 
-        async function logout() {
-            const response = await fetch('/api/logout', {
-                method: 'POST',
-            });
 
-            if (response.ok) {
-                alert('Logged out successfully');
-                window.location.reload();
-            } else {
-                alert('Failed to log out');
-            }
-        }
+           if (response.ok) {
+               const profile = await response.json();
+               userInfo.innerHTML = `
+                   <p>Welcome, ${profile.FirstName}!</p>
+                   <button onclick="logout()">Logout</button>
+               `;
+           } else {
+               userInfo.innerHTML = `
+                   <a href="/register">Register</a> | <a href="/login">Login</a>
+               `;
+           }
+       }
 
-        checkUserStatus();
-    </script>
+
+       async function logout() {
+           const response = await fetch('/api/logout', {
+               method: 'POST',
+           });
+
+
+           if (response.ok) {
+               alert('Logged out successfully');
+               window.location.reload();
+           } else {
+               alert('Failed to log out');
+           }
+       }
+
+
+       checkUserStatus();
+   </script>
 </main>
 {{template "footer.html" .}}
+
+
