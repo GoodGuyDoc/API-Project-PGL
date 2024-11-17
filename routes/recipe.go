@@ -14,7 +14,7 @@ func SetupRecipeRoutes() {
 	http.HandleFunc("/api/recipes", RecipeHandler)
 	http.HandleFunc("/api/recipes/byTag", RecipeByTagHandler)
 	http.HandleFunc("/api/recipe/", RecipeDetailHandler)
-	http.HandleFunc("/recipe/", RecipeDetailPageHandler)
+	http.HandleFunc("/recipe_detail", RecipeDetailPageHandler)
 	http.HandleFunc("/api/convert", ConversionHandler)
 	http.HandleFunc("/random_recipe_page", RandomRecipePageHandler)
 }
