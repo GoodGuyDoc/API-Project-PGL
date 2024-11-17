@@ -67,7 +67,6 @@ func GetRandomRecipesByTag(count int, includeTags string, excludeTags string) ([
 		}
 	}
 
-	fmt.Printf("tags for inclusion: %s", includeTags)
 	return recipeResponse.Recipes, nil
 }
 
