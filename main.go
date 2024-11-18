@@ -35,8 +35,8 @@ func main() {
 }
 
 func TestSetupServer(t *testing.T) {
-	var isFailed, _ = setupServer()
-	if isFailed {
-		t.Fatalf("Test Setup failed. No other aspects of the program can continue...")
+	err := setupServer()
+	if err != nil {
+		t.Errorf("Test Setup failed. No other aspects of the program can continue...")
 	}
 }
