@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"reflect"
 )
 
 var API_KEY = [3]string{"a867e9b240a645c3a08192f8d6b8b61c", "7e40fb0f0f254a1aa1444150b5c71d07", "eea7c0c25e204d42b58aa324a6ddec5c"}
@@ -99,4 +100,37 @@ func getRecipe(apiString string) (*Recipe, error) {
 	}
 
 	return &recipe, nil
+}
+
+// Sends an api call to spoonacular api. Provide the req string, as well as the address to a var of a struct type to be returned. Returns whether there was an error or not.
+func sendApiCall(apiString string, returnVar interface{}) error {
+	// Make sure we receive a pointer address
+	if reflect.ValueOf(returnVar).Kind() != reflect.Ptr {
+		return fmt.Errorf("returnVar must be a pointer")
+	}
+
+	resp, err := http.Get(apiString)
+	// check for err
+	if err != nil {
+		return fmt.Errorf("error making request to Spoonacular API: %w", err)
+	}
+	defer resp.Body.Close()
+
+	// check status code
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
+	// convert body
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("error reading response body: %w", err)
+	}
+
+	err = json.Unmarshal(body, &returnVar)
+	if err != nil {
+		return fmt.Errorf("error parsing JSON: %w", err)
+	}
+
+	return nil
 }
