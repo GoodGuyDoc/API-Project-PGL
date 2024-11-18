@@ -113,16 +113,14 @@ func logToFile(filename string, data []byte) error {
 	return nil
 }
 
-func TestRandomRecipeCall(t *testing.T)([]Recipe recipe, error err){
-
-	recipe,err := GetRandomRecipes(1)
+func TestRandomRecipeCall(t *testing.T) {
+	recipe,err := GetRandomRecipes(100)
 	if err != nil {
-		t.Fail()
+		t.Errorf("Error in TestRandomRecipeCall %v",err)
 	}
 	else{
-		fmt.Println("RandomRecipe Call Successful.")
+		t.Log("RandomRecipe Call Successful.")
 	}
-	return recipe, err
 }
 
 
@@ -146,3 +144,4 @@ func TestLogToFile(t *testing.T) {
 		},
 	}
 }
+

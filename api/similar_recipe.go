@@ -15,13 +15,23 @@ func GetSimilarRecipe(recipeId int) ([]Recipe, error) {
 	return recipeResponse.Recipes, nil
 }
 
-TestSimilarRecipe(t *testing.T)(error,[]Recipe recipe){
+TestSimilarRecipe(t *testing.T) {
 	//Random Similar Recipe call just for testing
 	var err := nil
-	recipe,err := GetSimilarRecipe(122)
+	_, err := GetSimilarRecipe("122",4)
 	if err != nil{
-		t.Fatal()
+		err = fmt.Errorf("error getting Similar Recipe mid num API: %v", err)
+}
+	_, err := GetSimilarRecipe("4001",1)
+if err != nil{
+err = fmt.Errorf("error getting Similar Recipe 1 num API: %v", err)
+}
+	_, err := GetSimilarRecipe("4001",10)
+if err != nil{
+err = fmt.Errorf("error getting Similar Recipe large num API: %v", err)
+}
+	if err != nil{
+		t.Errorf("error getting spoonacular recipe with id 122: %v", err)
 	}
-	return recipe,err
 }
 

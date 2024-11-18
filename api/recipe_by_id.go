@@ -15,13 +15,11 @@ func GetRecipeByID(recipeID string) (*Recipe, error) {
 	return recipe, nil
 }
 
-func TestGetRecipeByID(t *testing.T) error {
+func TestGetRecipeByID(t *testing.T){
 	var err error = nil
 	_, err = GetRecipeByID("1003464") //Makes a call to the API for testing purposes. Much easier than making entire set of mock data.
 	if err != nil {
-		t.Errorf("There was an error getting recipe by ID %w", err)
-		return err
+		t.Errorf("There was an error getting recipe by ID %v", err)
 	}
 	t.Log("Test GetRecipeByID Successful")
-	return nil
 }
