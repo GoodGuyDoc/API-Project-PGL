@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 )
 
 // Takes an apiString input to call, then returns a *RecipeResponse, or an error
@@ -83,10 +82,6 @@ func getRecipe(apiString string) (*Recipe, error) {
 		return nil, fmt.Errorf("error formatting JSON: %w", err)
 	}
 
-	file, err := os.Create("response_log.txt")
-	if err != nil {
-		return nil, fmt.Errorf("there was an error creating file file to be passed to getRecipe")
-	}
 	// Log the formatted JSON to a file named response_log.txt
 	err = logToFile("response_log.txt", indentedJSON) //TODO fix this with the new log format
 	if err != nil {
