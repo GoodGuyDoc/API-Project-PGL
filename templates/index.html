@@ -8,10 +8,12 @@
 </nav>
 <main>
     <div class="content-wrapper">
-    <h1>Welcome to the Spoonacular API App</h1>
-    <p>Explore recipes, save your favorites, and more.</p>
-    <div id="user-info"></div>
-    <a href="/api/recipes">View Recipes</a>
+        <h1>Welcome to Golang Grub</h1>
+        <p>Generate a random recipe, save your favorites, and more.</p>
+        <div id="user-info"></div>
+        <h1 id="get-started">Ready to Generate a Random Recipe? Click the Button Below!</h1>
+        <div>
+            <a href="/random_recipe_page"><button id="get-started-button" style="width: 50%;">Get Started</button></a>
     <div id="content"></div>
     </div>
 
@@ -46,40 +48,7 @@
             }
         }
 
-        async function fetchRecipes() {
-            const response = await fetch('/api/recipes');
-            if (response.ok) {
-                const recipes = await response.json();
-                const content = document.getElementById('content');
-                content.innerHTML = recipes.map(recipe => `
-                    <div>
-                        <h2>${recipe.title}</h2>
-                        <a href="/recipe/${recipe.id}">
-                            <img src="${recipe.image}" alt="${recipe.title}" style="max-width: 200px;">
-                        </a>
-                        <button onclick="addFavorite(${recipe.id}, '${recipe.title}', '${recipe.image}')">Add to Favorites</button>
-                    </div>
-                `).join('');
-            } else {
-                console.error('Failed to fetch recipes');
-            }
-        }
-
-        async function addFavorite(recipeID, title, image) {
-            const response = await fetch('/api/add-favorite', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ recipe_id: recipeID, title, image })
-            });
-
-            const result = await response.json();
-            alert(result.message || 'Failed to add favorite');
-        }
-
         checkUserStatus();
-        fetchRecipes();
     </script>
 </main>
 {{template "footer.html" .}}

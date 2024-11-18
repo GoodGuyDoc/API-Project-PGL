@@ -1,35 +1,27 @@
 package api
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
+	"testing"
 )
 
 // fetches detailed information about a recipe using its ID
 func GetRecipeByID(recipeID string) (*Recipe, error) {
 	apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/%s/information?apiKey=%s", recipeID, API_KEY)
-	resp, err := http.Get(apiUrl)
+	recipe, err := getRecipe(apiUrl)
 	if err != nil {
-		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
+		return nil, err
 	}
-	defer resp.Body.Close()
+	return recipe, nil
+}
 
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
-	}
-
-	body, err := io.ReadAll(resp.Body)
+func TestGetRecipeByID(t *testing.T) error {
+	var err error = nil
+	_, err = GetRecipeByID("1003464") //Makes a call to the API for testing purposes. Much easier than making entire set of mock data.
 	if err != nil {
-		return nil, fmt.Errorf("error reading response body: %w", err)
+		t.Errorf("There was an error getting recipe by ID %w", err)
+		return err
 	}
-
-	var recipe Recipe // Unmarshal the JSON response into Recipe struct(located in random_recipe.go)
-	err = json.Unmarshal(body, &recipe)
-	if err != nil {
-		return nil, fmt.Errorf("error parsing JSON: %w", err)
-	}
-
-	return &recipe, nil
+	t.Log("Test GetRecipeByID Successful")
+	return nil
 }
