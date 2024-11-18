@@ -150,6 +150,10 @@
   border: 1px solid #60463b !important;
  }
 
+ .select2-selection__clear {
+  width: fit-content;
+ }
+
 /* styling for clear button */
 .select2-selection__clear > span {
   color: #333;
@@ -157,8 +161,7 @@
 
 /* remove option for dropdown styling*/
 .select2-selection__choice__remove {
-/*   width: fit-content; */
-  width: 25px;
+  width: fit-content;
   color: #fff;
   margin-right: 5px;
   cursor: pointer;
@@ -333,7 +336,7 @@
  }
  
  
- form button {
+ form > button {
   margin-top: 20px;
  }
  
