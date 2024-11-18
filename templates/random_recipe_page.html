@@ -17,191 +17,239 @@
 
 <main>
   <div class="content-wrapper">
-    <h1>Generate a Random Recipe</h1>
-    <p>
-      Follow the Steps Below to Customize and Generate a Random Culinary Delight
-    </p>
-    <hr style="margin-bottom: 20px" />
-    <h2 style="margin-bottom: 20px">
-      Step 1: Select Tags That Your Recipe Must Have
-    </h2>
-    <div class="select-container">
-      <label for="diet-select">Select Diets:</label>
-      <select id="diet-select" class="tags" multiple>
-        <option value="gluten-free">Gluten-Free</option>
-        <option value="keto">Keto</option>
-        <option value="vegetarian">Vegetarian</option>
-        <option value="lacto-vegetarian">Lacto-Vegetarian</option>
-        <option value="vegan">Vegan</option>
-        <option value="pescatarian">Pescatarian</option>
-        <option value="paleo">Paleo</option>
-        <option value="primal">Primal</option>
-      </select>
+    <form id="recipe-form">
+      <h1>Generate a Random Recipe</h1>
+      <p style="margin: 0">
+        Follow the Steps Below to Customize and Generate a Random Culinary
+        Delight
+      </p>
+      <hr />
+      <h2 style="margin-bottom: 20px">
+        Step 1: Select Tags That Your Recipe Must Have
+      </h2>
+      <div class="select-container">
+        <label for="diet-select">Select Diets:</label>
+        <select id="diet-select" class="tags" multiple name="diet-select">
+          <option value="gluten-free">Gluten-Free</option>
+          <option value="keto">Keto</option>
+          <option value="vegetarian">Vegetarian</option>
+          <option value="lacto-vegetarian">Lacto-Vegetarian</option>
+          <option value="vegan">Vegan</option>
+          <option value="pescatarian">Pescatarian</option>
+          <option value="paleo">Paleo</option>
+          <option value="primal">Primal</option>
+        </select>
 
-      <label for="meal-type-select">Select Meal Types:</label>
-      <select id="meal-type-select" class="tags" multiple>
-        <option value="main course">Main Course</option>
-        <option value="side dish">Side Dish</option>
-        <option value="dessert">Dessert</option>
-        <option value="appetizer">Appetizer</option>
-        <option value="salad">Salad</option>
-        <option value="bread">Bread</option>
-        <option value="breakfast">Breakfast</option>
-        <option value="soup">Soup</option>
-        <option value="beverage">Beverage</option>
-        <option value="sauce">Sauce</option>
-        <option value="marinade">Marinade</option>
-        <option value="fingerfood">Fingerfood</option>
-        <option value="snack">Snack</option>
-        <option value="drink">Drink</option>
-      </select>
+        <label for="meal-type-select">Select Meal Types:</label>
+        <select
+          id="meal-type-select"
+          class="tags"
+          multiple
+          name="meal-type-select"
+        >
+          <option value="main course">Main Course</option>
+          <option value="side dish">Side Dish</option>
+          <option value="dessert">Dessert</option>
+          <option value="appetizer">Appetizer</option>
+          <option value="salad">Salad</option>
+          <option value="bread">Bread</option>
+          <option value="breakfast">Breakfast</option>
+          <option value="soup">Soup</option>
+          <option value="beverage">Beverage</option>
+          <option value="sauce">Sauce</option>
+          <option value="marinade">Marinade</option>
+          <option value="fingerfood">Fingerfood</option>
+          <option value="snack">Snack</option>
+          <option value="drink">Drink</option>
+        </select>
 
-      <label for="cuisine-select">Select Cuisines:</label>
-      <select id="cuisine-select" class="tags" multiple>
-        <option value="african">African</option>
-        <option value="asian">Asian</option>
-        <option value="american">American</option>
-        <option value="british">British</option>
-        <option value="cajun">Cajun</option>
-        <option value="caribbean">Caribbean</option>
-        <option value="chinese">Chinese</option>
-        <option value="eastern european">Eastern European</option>
-        <option value="european">European</option>
-        <option value="french">French</option>
-        <option value="german">German</option>
-        <option value="greek">Greek</option>
-        <option value="indian">Indian</option>
-        <option value="irish">Irish</option>
-        <option value="italian">Italian</option>
-        <option value="japanese">Japanese</option>
-        <option value="jewish">Jewish</option>
-        <option value="korean">Korean</option>
-        <option value="latin american">Latin American</option>
-        <option value="mediterranean">Mediterranean</option>
-        <option value="mexican">Mexican</option>
-        <option value="middle eastern">Middle Eastern</option>
-        <option value="nordic">Nordic</option>
-        <option value="southern">Southern</option>
-        <option value="spanish">Spanish</option>
-        <option value="thai">Thai</option>
-        <option value="vietnamese">Vietnamese</option>
-      </select>
+        <label for="cuisine-select">Select Cuisines:</label>
+        <select id="cuisine-select" class="tags" multiple name="cuisine-select">
+          <option value="african">African</option>
+          <option value="asian">Asian</option>
+          <option value="american">American</option>
+          <option value="british">British</option>
+          <option value="cajun">Cajun</option>
+          <option value="caribbean">Caribbean</option>
+          <option value="chinese">Chinese</option>
+          <option value="eastern european">Eastern European</option>
+          <option value="european">European</option>
+          <option value="french">French</option>
+          <option value="german">German</option>
+          <option value="greek">Greek</option>
+          <option value="indian">Indian</option>
+          <option value="irish">Irish</option>
+          <option value="italian">Italian</option>
+          <option value="japanese">Japanese</option>
+          <option value="jewish">Jewish</option>
+          <option value="korean">Korean</option>
+          <option value="latin american">Latin American</option>
+          <option value="mediterranean">Mediterranean</option>
+          <option value="mexican">Mexican</option>
+          <option value="middle eastern">Middle Eastern</option>
+          <option value="nordic">Nordic</option>
+          <option value="southern">Southern</option>
+          <option value="spanish">Spanish</option>
+          <option value="thai">Thai</option>
+          <option value="vietnamese">Vietnamese</option>
+        </select>
 
-      <label for="intolerance-select">Select Intolerances:</label>
-      <select id="intolerance-select" class="tags" multiple>
-        <option value="dairy">Dairy</option>
-        <option value="egg">Egg</option>
-        <option value="gluten">Gluten</option>
-        <option value="grain">Grain</option>
-        <option value="peanut">Peanut</option>
-        <option value="seafood">Seafood</option>
-        <option value="sesame">Sesame</option>
-        <option value="shellfish">Shellfish</option>
-        <option value="soy">Soy</option>
-        <option value="sulfite">Sulfite</option>
-        <option value="tree nut">Tree Nut</option>
-        <option value="wheat">Wheat</option>
-      </select>
-    </div>
-    <h2 style="margin-bottom: 20px; margin-top: 20px">
-      Step 2: Select Tags That Your Recipe Must NOT Have
-    </h2>
-    <div class="must-not-container">
-      <label for="diet-must-not">Select Diets:</label>
-      <select id="diet-must-not" class="tags" multiple>
-        <option value="gluten-free">Gluten-Free</option>
-        <option value="keto">Keto</option>
-        <option value="vegetarian">Vegetarian</option>
-        <option value="lacto-vegetarian">Lacto-Vegetarian</option>
-        <option value="vegan">Vegan</option>
-        <option value="pescatarian">Pescatarian</option>
-        <option value="paleo">Paleo</option>
-        <option value="primal">Primal</option>
-      </select>
+        <label for="intolerance-select">Select Intolerances:</label>
+        <select
+          id="intolerance-select"
+          class="tags"
+          multiple
+          name="intolerance-select"
+        >
+          <option value="dairy">Dairy</option>
+          <option value="egg">Egg</option>
+          <option value="gluten">Gluten</option>
+          <option value="grain">Grain</option>
+          <option value="peanut">Peanut</option>
+          <option value="seafood">Seafood</option>
+          <option value="sesame">Sesame</option>
+          <option value="shellfish">Shellfish</option>
+          <option value="soy">Soy</option>
+          <option value="sulfite">Sulfite</option>
+          <option value="tree nut">Tree Nut</option>
+          <option value="wheat">Wheat</option>
+        </select>
+      </div>
+      <h2 style="margin-bottom: 20px; margin-top: 20px">
+        Step 2: Select Tags That Your Recipe Must NOT Have
+      </h2>
+      <div class="must-not-container">
+        <label for="diet-must-not">Select Diets:</label>
+        <select id="diet-must-not" class="tags" multiple name="diet-must-not">
+          <option value="gluten-free">Gluten-Free</option>
+          <option value="keto">Keto</option>
+          <option value="vegetarian">Vegetarian</option>
+          <option value="lacto-vegetarian">Lacto-Vegetarian</option>
+          <option value="vegan">Vegan</option>
+          <option value="pescatarian">Pescatarian</option>
+          <option value="paleo">Paleo</option>
+          <option value="primal">Primal</option>
+        </select>
 
-      <label for="meal-must-not">Select Meal Types:</label>
-      <select id="meal-must-not" class="tags" multiple>
-        <option value="main course">Main Course</option>
-        <option value="side dish">Side Dish</option>
-        <option value="dessert">Dessert</option>
-        <option value="appetizer">Appetizer</option>
-        <option value="salad">Salad</option>
-        <option value="bread">Bread</option>
-        <option value="breakfast">Breakfast</option>
-        <option value="soup">Soup</option>
-        <option value="beverage">Beverage</option>
-        <option value="sauce">Sauce</option>
-        <option value="marinade">Marinade</option>
-        <option value="fingerfood">Fingerfood</option>
-        <option value="snack">Snack</option>
-        <option value="drink">Drink</option>
-      </select>
+        <label for="meal-must-not">Select Meal Types:</label>
+        <select id="meal-must-not" class="tags" multiple name="meal-must-not">
+          <option value="main course">Main Course</option>
+          <option value="side dish">Side Dish</option>
+          <option value="dessert">Dessert</option>
+          <option value="appetizer">Appetizer</option>
+          <option value="salad">Salad</option>
+          <option value="bread">Bread</option>
+          <option value="breakfast">Breakfast</option>
+          <option value="soup">Soup</option>
+          <option value="beverage">Beverage</option>
+          <option value="sauce">Sauce</option>
+          <option value="marinade">Marinade</option>
+          <option value="fingerfood">Fingerfood</option>
+          <option value="snack">Snack</option>
+          <option value="drink">Drink</option>
+        </select>
 
-      <label for="cuisine-must-not">Select Cuisines:</label>
-      <select id="cuisine-must-not" class="tags" multiple>
-        <option value="african">African</option>
-        <option value="asian">Asian</option>
-        <option value="american">American</option>
-        <option value="british">British</option>
-        <option value="cajun">Cajun</option>
-        <option value="caribbean">Caribbean</option>
-        <option value="chinese">Chinese</option>
-        <option value="eastern european">Eastern European</option>
-        <option value="european">European</option>
-        <option value="french">French</option>
-        <option value="german">German</option>
-        <option value="greek">Greek</option>
-        <option value="indian">Indian</option>
-        <option value="irish">Irish</option>
-        <option value="italian">Italian</option>
-        <option value="japanese">Japanese</option>
-        <option value="jewish">Jewish</option>
-        <option value="korean">Korean</option>
-        <option value="latin american">Latin American</option>
-        <option value="mediterranean">Mediterranean</option>
-        <option value="mexican">Mexican</option>
-        <option value="middle eastern">Middle Eastern</option>
-        <option value="nordic">Nordic</option>
-        <option value="southern">Southern</option>
-        <option value="spanish">Spanish</option>
-        <option value="thai">Thai</option>
-        <option value="vietnamese">Vietnamese</option>
-      </select>
+        <label for="cuisine-must-not">Select Cuisines:</label>
+        <select
+          id="cuisine-must-not"
+          class="tags"
+          multiple
+          name="cuisine-must-not"
+        >
+          <option value="african">African</option>
+          <option value="asian">Asian</option>
+          <option value="american">American</option>
+          <option value="british">British</option>
+          <option value="cajun">Cajun</option>
+          <option value="caribbean">Caribbean</option>
+          <option value="chinese">Chinese</option>
+          <option value="eastern european">Eastern European</option>
+          <option value="european">European</option>
+          <option value="french">French</option>
+          <option value="german">German</option>
+          <option value="greek">Greek</option>
+          <option value="indian">Indian</option>
+          <option value="irish">Irish</option>
+          <option value="italian">Italian</option>
+          <option value="japanese">Japanese</option>
+          <option value="jewish">Jewish</option>
+          <option value="korean">Korean</option>
+          <option value="latin american">Latin American</option>
+          <option value="mediterranean">Mediterranean</option>
+          <option value="mexican">Mexican</option>
+          <option value="middle eastern">Middle Eastern</option>
+          <option value="nordic">Nordic</option>
+          <option value="southern">Southern</option>
+          <option value="spanish">Spanish</option>
+          <option value="thai">Thai</option>
+          <option value="vietnamese">Vietnamese</option>
+        </select>
 
-      <label for="intolerance-must-not">Select Intolerances:</label>
-      <select id="intolerance-must-not" class="tags" multiple>
-        <option value="dairy">Dairy</option>
-        <option value="egg">Egg</option>
-        <option value="gluten">Gluten</option>
-        <option value="grain">Grain</option>
-        <option value="peanut">Peanut</option>
-        <option value="seafood">Seafood</option>
-        <option value="sesame">Sesame</option>
-        <option value="shellfish">Shellfish</option>
-        <option value="soy">Soy</option>
-        <option value="sulfite">Sulfite</option>
-        <option value="tree nut">Tree Nut</option>
-        <option value="wheat">Wheat</option>
-      </select>
-    </div>
+        <label for="intolerance-must-not">Select Intolerances:</label>
+        <select
+          id="intolerance-must-not"
+          class="tags"
+          multiple
+          name="intolerance-must-not"
+        >
+          <option value="dairy">Dairy</option>
+          <option value="egg">Egg</option>
+          <option value="gluten">Gluten</option>
+          <option value="grain">Grain</option>
+          <option value="peanut">Peanut</option>
+          <option value="seafood">Seafood</option>
+          <option value="sesame">Sesame</option>
+          <option value="shellfish">Shellfish</option>
+          <option value="soy">Soy</option>
+          <option value="sulfite">Sulfite</option>
+          <option value="tree nut">Tree Nut</option>
+          <option value="wheat">Wheat</option>
+        </select>
+      </div>
+    </form>
     <h2 style="margin-bottom: 20px; margin-top: 20px">
       Step 3: Press the Generate Button to Get Your Random Recipe
     </h2>
     <div>
-      <button id="generate-recipe-button" style="width: 85%">
+      <button
+        id="generate-recipe-button"
+        style="width: 85%"
+        onclick="getNewRecipe()"
+      >
         Generate Recipe
       </button>
-      <div id="content"></div>
+      <div id="recipe-results" style="display: none">
+        <h2>Recipe Results</h2>
+        <div id="recipe-results-container">
+          <div>
+            <img src="" id="recipe-results-image" />
+          </div>
+          <div id="recipe-results-text">
+            <h3>
+              Recipe Name: <span id="recipe-name-result">Recipe Name</span>
+            </h3>
+            <p>
+              Recipe Description:
+              <span id="recipe-description-result">Recipe Description</span>
+            </p>
+            <p>
+              Recipe Instructions:
+              <span id="recipe-instructions-result">Recipe Instructions</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="button-container">
+        <button id="similar-recipe-button" class="additional-button">
+          Get Similar Recipe
+        </button>
+        <a href="/recipe_detail" class="additional-button-link"
+          ><button id="recipe-ingredients-button" class="additional-button">
+            Recipe Ingredients
+          </button>
+        </a>
+      </div>
     </div>
-    <div class="button-container">
-      <button id="similar-recipe-button" class="additional-button">
-        Get Similar Recipe
-      </button>
-      <a href="/recipe_detail" class="additional-button-link"><button id="recipe-ingredients-button" class="additional-button">
-        Recipe Ingredients
-      </button> </a>
-    </div>
-  </div>
 
     <script>
       $(document).ready(function () {
@@ -210,6 +258,42 @@
           allowClear: true,
         });
       });
+      function extractSelectOptions(selectId) {
+        let options = [];
+        $(selectId)
+          .find("option:selected")
+          .each(function () {
+            options.push($(this).val());
+          });
+        return options;
+      }
+      function getNewRecipe() {
+        const selectIds = [
+          "#diet-select",
+          "#meal-type-select",
+          "#cuisine-select",
+          "#intolerance-select",
+          "#diet-must-not",
+          "#meal-must-not",
+          "#cuisine-must-not",
+          "#intolerance-must-not",
+        ];
+        let results = {};
+        selectIds.forEach((selectId) => {
+          id = selectId.replace("#", "");
+          results[id] = extractSelectOptions(selectId);
+        });
+        console.log(JSON.stringify(results));
+        $.ajax({
+          type: "POST",
+          url: "/api/recipies/byTag",
+          data: JSON.stringify(results),
+          contentType: "application/json",
+          success: function (response) {
+            //console.log(response);
+          },
+        });
+      }
     </script>
   </div>
 </main>
