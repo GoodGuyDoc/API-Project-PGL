@@ -31,7 +31,7 @@ func TestGetRecipeByID(t *testing.T) error {
 	var err error = nil
 	_, err = GetRecipeByID("1003464") //Makes a call to the API for testing purposes. Much easier than making entire set of mock data.
 	if err != nil {
-		t.Errorf("There was an error getting recipe by ID %w", err)
+		t.Errorf("There was an error getting recipe by ID %v", err)
 		return err
 	}
 	t.Log("Test GetRecipeByID Successful")
