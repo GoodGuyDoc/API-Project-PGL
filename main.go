@@ -14,7 +14,9 @@ func setupServer() error {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 	fmt.Println("Server is running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
-	return nil
+
+	_, err := http.Get("http://localhost:8080/")
+	return err
 }
 
 func main() {
@@ -35,8 +37,8 @@ func main() {
 }
 
 func TestSetupServer(t *testing.T) {
-	var isFailed, _ = setupServer()
-	if isFailed {
+	var isFailed = setupServer()
+	if isFailed != nil {
 		t.Fatalf("Test Setup failed. No other aspects of the program can continue...")
 	}
 }
