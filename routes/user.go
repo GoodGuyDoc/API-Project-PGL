@@ -6,9 +6,11 @@ import (
 	"net/http"
 	"spoonacular-api/db"
 	"spoonacular-api/session"
+	"testing"
 )
 
 func SetupUserRoutes() {
+
 	//handle and serve static HTML pages(accessable to user)
 	http.HandleFunc("/", HomePageHandler)
 	http.HandleFunc("/profile", ProfilePageHandler)
@@ -16,6 +18,7 @@ func SetupUserRoutes() {
 	//handle and serve JSON data(accessed programmatically within the html pages)
 	http.HandleFunc("/api/profile", ProfileHandler)
 	http.HandleFunc("/api/add-favorite", AddFavoriteHandler)
+
 }
 
 // HomePageHandler serves the main HTML page when users visit the root URL.
@@ -34,7 +37,7 @@ func ProfilePageHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := session.Store.Get(r, "session-name")
 	userID, ok := session.Values["userID"].(int)
 
-	//if user is not logged in, redirect to login page
+	//if user is not logged in, redirect to login page so the user can log in...duh
 	if !ok || userID == 0 {
 		tmpl, err := template.ParseFiles("templates/login.html", "templates/header.html", "templates/footer.html")
 		if err != nil {
@@ -75,6 +78,32 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	//send json response back to the frontend
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(userProfile)
+}
+
+func TestProfilePageHandler(t *testing.T) {
+	//Get response from request (replace the _ with res)
+	_, err := http.NewRequest("GET", "/profile", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	//Can be used for extra testing
+	// resRec := httptest.NewRecorder()
+	// err := http.HandleFunc("/profile", ProfilePageHandler)
+
+}
+
+func TestHomePageHandler(t *testing.T) {
+	//make a request to the home page.
+	_, err := http.NewRequest("GET", "/profile", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestFavoritesHandler() {
+	//TODO Finish Favorites Testing
+	//Make a request to the Favorites Page
+
 }
 
 // AddFavoriteHandler handles adding a recipe to the user's favorites list.

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 )
 
 var API_KEY = [3]string{"a867e9b240a645c3a08192f8d6b8b61c", "7e40fb0f0f254a1aa1444150b5c71d07", "eea7c0c25e204d42b58aa324a6ddec5c"}
@@ -87,12 +88,15 @@ func getRecipe(apiString string) (*Recipe, error) {
 		return nil, fmt.Errorf("error formatting JSON: %w", err)
 	}
 
+	file, err := os.Create("response_log.txt")
+	if err != nil {
+		return nil, fmt.Errorf("there was an error creating file file to be passed to getRecipe")
+	}
 	// Log the formatted JSON to a file named response_log.txt
-	err = logToFile("response_log.txt", indentedJSON)
+	err = logToFile("response_log.txt", indentedJSON) //TODO fix this with the new log format
 	if err != nil {
 		return nil, fmt.Errorf("error logging to file: %w", err)
 	}
-
 	var recipe Recipe
 	err = json.Unmarshal(body, &recipe)
 	if err != nil {
