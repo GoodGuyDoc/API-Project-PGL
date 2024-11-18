@@ -1,42 +1,33 @@
 package api
 
 import (
-	"encoding/json"
+	"errors"
 	"fmt"
-	"io"
-	"net/http"
 )
 
 type ConversionInformation struct {
 	SourceAmount float64 `json:"sourceAmount"`
-	SourceUnit   string  `json:"title"`
-	TargetAmount float64 `json:"image"`
-	TargetUnit   string  `json:"analyzedInstructions"`
-	Answer       string  `json:"extendedIngredients"`
+	SourceUnit   string  `json:"sourceUnit"`
+	TargetAmount float64 `json:"targetAmount"`
+	TargetUnit   string  `json:"targetUnit"`
+	Answer       string  `json:"answer"`
 }
 
 func ConvertAmount(ingredientName string, amount float64, unit string, convertToUnit string) (*ConversionInformation, error) {
-	apiUrl := fmt.Sprintf("https://api.spoonacular.com/convert?apiKey=%s&ingredientName=%s&sourceAmount=%.2f&sourceUnit=%s&targetUnit=%s", API_KEY, ingredientName, amount, unit, convertToUnit)
-	resp, err := http.Get(apiUrl)
-	if err != nil {
-		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
-	}
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("error reading response body: %w", err)
-	}
-
 	var conversionInfo ConversionInformation
-	err = json.Unmarshal(body, &conversionInfo)
-	if err != nil {
-		return nil, fmt.Errorf("error parsing JSON: %w", err)
-	}
+	var err error
 
-	return &conversionInfo, nil
+	for i := 0; i < 3; i++ {
+		apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/convert?apiKey=%s&ingredientName=%s&sourceAmount=%.2f&sourceUnit=%s&targetUnit=%s", API_KEY[i], ingredientName, amount, unit, convertToUnit)
+		err = sendApiCall(apiUrl, &conversionInfo)
+
+		if err != nil && err.Error() == "this api key is ratelimited" {
+			continue
+		} else if err != nil {
+			return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
+		}
+		return &conversionInfo, nil
+	}
+	// if we did not find a good api key, throw an error (we finished looping)
+	return nil, fmt.Errorf("error making request to Spoonacular API: %w", errors.New("all api keys are ratelimited"))
 }

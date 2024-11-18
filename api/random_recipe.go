@@ -3,10 +3,9 @@ package api
 import (
 	"fmt"
 	"os"
-	"strings"
+	"path/filepath"
+	"testing"
 )
-
-const API_KEY = "a867e9b240a645c3a08192f8d6b8b61c"
 
 type RecipeResponse struct {
 	Recipes []Recipe `json:"recipes"`
@@ -36,8 +35,21 @@ type Step struct {
 
 // Returns count amount of random recipes from spoonacular api
 func GetRandomRecipes(count int) ([]Recipe, error) {
-	apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/random?apiKey=%s&number=%d", API_KEY, count)
-	recipeResponse, err := getRecipeResponse(apiUrl)
+	var recipeResponse *RecipeResponse
+	var err error
+
+	// there are no while loops in go, lol
+	for i := 0; i < 3; i++ {
+		apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/random?apiKey=%s&number=%d", API_KEY[i], count)
+		recipeResponse, err = getRecipeResponse(apiUrl)
+
+		if err != nil && err.Error() == "this api key is ratelimited" {
+			continue
+		} else {
+			break
+		}
+	}
+
 	if err != nil {
 		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
 	}
@@ -46,12 +58,15 @@ func GetRandomRecipes(count int) ([]Recipe, error) {
 }
 
 // Returns count amount of random recipes from spoonacular api that are tagged with the specified tags
-func GetRandomRecipesByTag(count int, tags []string) ([]Recipe, error) {
-	includeTags := strings.Join(tags, ",")
-	apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/random?apiKey=%s&number=%d&include-tags=%s", API_KEY, count, includeTags)
+func GetRandomRecipesByTag(count int, includeTags string, excludeTags string) ([]Recipe, error) {
+	apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/random?apiKey=%s&number=%d&include-tags=%s&exclude-tags=%s", API_KEY[0], count, includeTags, excludeTags)
 	recipeResponse, err := getRecipeResponse(apiUrl)
 	if err != nil {
-		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
+		if err.Error() == "no recipes found" {
+			return []Recipe{}, nil // return empty struct
+		} else {
+			return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
+		}
 	}
 
 	return recipeResponse.Recipes, nil
@@ -59,6 +74,7 @@ func GetRandomRecipesByTag(count int, tags []string) ([]Recipe, error) {
 
 // logToFile writes data to a file.
 func logToFile(filename string, data []byte) error {
+
 	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return fmt.Errorf("error opening file: %w", err)
@@ -77,4 +93,29 @@ func logToFile(filename string, data []byte) error {
 	}
 
 	return nil
+}
+
+func TestRandomRecipeCall(t *testing.T) {
+	_, err := GetRandomRecipes(100)
+	if err != nil {
+		t.Errorf("There was an error in random recipe testing ERROR: %v", err)
+	} else {
+		t.Log("RandomRecipe Call Successful.")
+	}
+}
+
+func TestLogToFile(t *testing.T) {
+	tempFile, err := os.CreateTemp("./test", "testlogfile*") //Create the temp file
+	if err != nil {
+		t.Errorf("There was an error when creating the testing tempFile: %v", err)
+	}
+	defer func() {
+		tempFile.Close()
+		os.Remove(tempFile.Name())
+	}()
+	fileAbs, err := filepath.Abs(tempFile.Name())
+	err = logToFile(fileAbs, []byte("Hello World!"))
+	if err != nil {
+		t.Errorf("There was an error while testing file logging %v", err)
+	}
 }
