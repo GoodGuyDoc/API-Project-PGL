@@ -3,7 +3,9 @@ package api
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
+	"testing"
 )
 
 const API_KEY = "a867e9b240a645c3a08192f8d6b8b61c"
@@ -59,6 +61,7 @@ func GetRandomRecipesByTag(count int, tags []string) ([]Recipe, error) {
 
 // logToFile writes data to a file.
 func logToFile(filename string, data []byte) error {
+
 	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return fmt.Errorf("error opening file: %w", err)
@@ -77,4 +80,29 @@ func logToFile(filename string, data []byte) error {
 	}
 
 	return nil
+}
+
+func TestRandomRecipeCall(t *testing.T) {
+	_, err := GetRandomRecipes(100)
+	if err != nil {
+		t.Errorf("There was an error in random recipe testing ERROR: %v", err)
+	} else {
+		t.Log("RandomRecipe Call Successful.")
+	}
+}
+
+func TestLogToFile(t *testing.T) {
+	tempFile, err := os.CreateTemp("./test", "testlogfile*") //Create the temp file
+	if err != nil {
+		t.Errorf("There was an error when creating the testing tempFile: %v", err)
+	}
+	defer func() {
+		tempFile.Close()
+		os.Remove(tempFile.Name())
+	}()
+	fileAbs, err := filepath.Abs(tempFile.Name())
+	err = logToFile(fileAbs, []byte("Hello World!"))
+	if err != nil {
+		t.Errorf("There was an error while testing file logging %v", err)
+	}
 }
