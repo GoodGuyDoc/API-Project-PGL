@@ -118,7 +118,10 @@ p {
  
 /* styling dropdown as a whole */
 .select2-container--default .select2-selection--multiple {
-  border-radius: 5px;
+  /* border-radius: 5px; */
+  display: flex;
+  flex-direction: row;
+  
   border: 1px solid #aaa;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background-color: #f9f9f9;
@@ -133,10 +136,17 @@ p {
   color: #fff;
   font-weight: bold;
   border: 1px solid #60463b !important;
- }
+  width: fit-content
+}
+
+/* styling for clear button */
+.select2-selection__clear > span {
+  color: #333;
+}
 
 /* remove option for dropdown styling*/
 .select2-selection__choice__remove {
+  width: 25px;
   color: #fff;
   margin-right: 5px;
   cursor: pointer;
