@@ -58,7 +58,7 @@ func GetSimilarRecipe(recipeId string, count int) ([]SimilarRecipe, error) {
 
 func TestSimilarRecipe(t *testing.T) error {
 	//Random Similar Recipe call just for testing
-	_, err := GetSimilarRecipe(122)
+	_, err := GetSimilarRecipe("122", 1)
 	if err != nil {
 		t.Errorf("There was an error grabbing similar recipe %v", err)
 		return err
