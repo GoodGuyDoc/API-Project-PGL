@@ -219,7 +219,7 @@
         Generate Recipe
       </button>
       <input type="hidden" id="recipe-id" />
-      <div id="recipe-results" style="display: none">
+      <div id="recipe-results">
         <h2>Recipe Results</h2>
         <div id="recipe-results-container">
           <div>
@@ -229,19 +229,16 @@
             <h3>
               Recipe Name: <span id="recipe-name-result">Recipe Name</span>
             </h3>
-            <p>
-              Recipe Description:
-              <span id="recipe-description-result">Recipe Description</span>
-            </p>
-            <p>
-              Recipe Instructions:
-              <span id="recipe-instructions-result">Recipe Instructions</span>
-            </p>
           </div>
         </div>
       </div>
       <div class="button-container">
-        <button id="similar-recipe-button" class="additional-button">
+        <button
+          id="similar-recipe-button"
+          class="additional-button"
+          disabled
+          onclick="getSimilarRecipe()"
+        >
           Get Similar Recipe
         </button>
         <a href="/recipe_detail" class="additional-button-link"
@@ -253,6 +250,9 @@
     </div>
 
     <script>
+      (() => {
+        $("#recipe-results").hide();
+      })();
       $(document).ready(function () {
         $(".tags").select2({
           placeholder: "Select options...",
@@ -286,17 +286,38 @@
         });
         $.ajax({
           type: "POST",
-          url: "/api/recipies/byTag",
+          url: "/api/recipes/byTag",
           data: JSON.stringify(results),
           contentType: "application/json",
           success: function (response) {
             console.log(response);
+            response = response[0];
             document.getElementById("recipe-results-image").src =
               response.image;
             document.getElementById("recipe-name-result").innerText =
               response.title;
             document.getElementById("recipe-id").value = response.id;
-            $("recipe-results").show("fast");
+            $("#recipe-results").show("fast");
+            $("#similar-recipe-button").prop("disabled", false);
+          },
+          error: function (response) {
+            console.log(response);
+          },
+        });
+      }
+      function getSimilarRecipe() {
+        const recipeId = document.getElementById("recipe-id").value;
+        $.ajax({
+          type: "GET",
+          url: "/api/similarRecipe/" + recipeId,
+          success: function (response) {
+            console.log(response);
+            response = response[0];
+            document.getElementById("recipe-results-image").src =
+              response.sourceUrl;
+            document.getElementById("recipe-name-result").innerText =
+              response.title;
+            document.getElementById("recipe-id").value = response.id;
           },
           error: function (response) {
             console.log(response);
