@@ -218,6 +218,7 @@
       >
         Generate Recipe
       </button>
+      <input type="hidden" id="recipe-id" />
       <div id="recipe-results" style="display: none">
         <h2>Recipe Results</h2>
         <div id="recipe-results-container">
@@ -283,14 +284,22 @@
           id = selectId.replace("#", "");
           results[id] = extractSelectOptions(selectId);
         });
-        console.log(JSON.stringify(results));
         $.ajax({
           type: "POST",
           url: "/api/recipies/byTag",
           data: JSON.stringify(results),
           contentType: "application/json",
           success: function (response) {
-            //console.log(response);
+            console.log(response);
+            document.getElementById("recipe-results-image").src =
+              response.image;
+            document.getElementById("recipe-name-result").innerText =
+              response.title;
+            document.getElementById("recipe-id").value = response.id;
+            $("recipe-results").show("fast");
+          },
+          error: function (response) {
+            console.log(response);
           },
         });
       }
