@@ -12,16 +12,20 @@ type RecipeResponse struct {
 }
 
 type Recipe struct {
-	ID    int    `json:"id"`
-	Title string `json:"title"`
-	Image string `json:"image"`
-	// AnalyzedInstructions []AnalyzedInstruction `json:"analyzedInstructions"`
-	// ExtendedIngredients  []Ingredient          `json:"extendedIngredients"`
+	ID          int          `json:"id"`
+	Title       string       `json:"title"`
+	Image       string       `json:"image"`
+	Ingredients []Ingredient `json:"extendedIngredients"`
 }
 
-// type Ingredient struct {
-// 	Original string `json:"original"`
-// }
+type Ingredient struct {
+	ID       int     `json:"id"`       // Unique identifier for the ingredient
+	Name     string  `json:"name"`     // Common name of the ingredient
+	Image    string  `json:"image"`    // URL of the ingredient image
+	Amount   float64 `json:"amount"`   // Quantity of the ingredient
+	Unit     string  `json:"unit"`     // Unit of measurement
+	Original string  `json:"original"` // Original string description from the recipe
+}
 
 // type AnalyzedInstruction struct {
 // 	Name  string `json:"name"`
