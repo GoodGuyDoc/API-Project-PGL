@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"spoonacular-api/api"
 	"strconv"
+	"strings"
 )
 
 func SetupRecipeRoutes() {
@@ -34,6 +35,17 @@ func RecipeHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(recipes)
 }
 
+type RandomRecipeTags struct {
+	DietSelect         []string `json:"diet-select"`
+	MealTypeSelect     []string `json:"meal-type-select"`
+	CuisineSelect      []string `json:"cuisine-select"`
+	IntoleranceSelect  []string `json:"intolerance-select"`
+	DietMustNot        []string `json:"diet-must-not"`
+	MealMustNot        []string `json:"meal-must-not"`
+	CuisineMustNot     []string `json:"cuisine-must-not"`
+	IntoleranceMustNot []string `json:"intolerance-must-not"`
+}
+
 // Gets recipes by tag, with an optional count parameter. Usage: /api/recipes/byTag?includeTags=tag1,tag2&excludeTags=tag3,tag4&count=4
 func RecipeByTagHandler(w http.ResponseWriter, r *http.Request) {
 	// parse count
@@ -46,15 +58,20 @@ func RecipeByTagHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// parse include tags
-	includeTags := r.URL.Query().Get("includeTags")
-	// tags := []string{}
-	// if includeTagsParam != "" {
-	// 	tags = strings.Split(includeTagsParam, ",")
-	// }
-	excludeTags := r.URL.Query().Get("excludeTags")
+	var tagRequest RandomRecipeTags
+	if err := json.NewDecoder(r.Body).Decode(&tagRequest); err != nil {
+		http.Error(w, `{"error": "Invalid JSON body"}`, http.StatusBadRequest)
+		return
+	}
 
-	recipes, err := api.GetRandomRecipesByTag(count, includeTags, excludeTags)
+	// flatten the tags (combine tags from the request as needed)
+	includeTags := append(append(tagRequest.DietSelect, tagRequest.MealTypeSelect...),
+		append(tagRequest.CuisineSelect, tagRequest.IntoleranceSelect...)...)
+
+	excludeTags := append(append(tagRequest.DietMustNot, tagRequest.MealMustNot...),
+		append(tagRequest.CuisineMustNot, tagRequest.IntoleranceMustNot...)...)
+
+	recipes, err := api.GetRandomRecipesByTag(count, strings.Join(includeTags, ","), strings.Join(excludeTags, ","))
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		http.Error(w, `{"error": "Failed to get recipes by tag"}`, http.StatusInternalServerError)
