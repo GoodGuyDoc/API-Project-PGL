@@ -3,6 +3,7 @@ package api
 import (
 	"errors"
 	"fmt"
+	"strconv"
 	"testing"
 )
 
@@ -15,17 +16,29 @@ type SimilarRecipe struct {
 	SourceUrl      string `json:"sourceUrl"`
 }
 
-func GetSimilarRecipe(recipeId string, count int) ([]SimilarRecipe, error) {
-	var recipes []SimilarRecipe
+func GetSimilarRecipe(recipeId string, count int) ([]Recipe, error) {
+	var similarRecipes []SimilarRecipe
+	var recipes []Recipe
 
 	for i := 0; i < 3; i++ {
 		apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/%s/similar?apiKey=%s&number=%d", recipeId, API_KEY[i], count)
-		err := sendApiCall(apiUrl, &recipes)
+		err := sendApiCall(apiUrl, &similarRecipes)
 
 		if err != nil && err.Error() == "this api key is ratelimited" { // bad api key, go next
 			continue
 		} else if err != nil {
 			return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
+		}
+
+		// make more queries to replace all similar recipes found with regular recipe objects
+		for j := 0; j < len(similarRecipes); j++ {
+			currRecipeId := strconv.Itoa(similarRecipes[j].ID) // if this conversion fails, we have problems
+			currRecipe, err := GetRecipeByID(currRecipeId)
+			if err != nil {
+				return nil, fmt.Errorf("error making request to Spoonacular API: %v", err)
+			}
+
+			recipes = append(recipes, *currRecipe)
 		}
 		return recipes, nil
 	}

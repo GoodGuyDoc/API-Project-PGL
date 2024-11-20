@@ -314,7 +314,7 @@
             console.log(response);
             response = response[0];
             document.getElementById("recipe-results-image").src =
-              response.sourceUrl;
+              response.image;
             document.getElementById("recipe-name-result").innerText =
               response.title;
             document.getElementById("recipe-id").value = response.id;
