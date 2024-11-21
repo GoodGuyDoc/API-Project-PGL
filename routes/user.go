@@ -3,6 +3,7 @@ package routes
 import (
 	"encoding/json"
 	"html/template"
+	"log"
 	"net/http"
 	"spoonacular-api/db"
 	"spoonacular-api/session"
@@ -134,6 +135,8 @@ func AddFavoriteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Printf("Adding to favorites: UserID=%d, RecipeID=%d, Title=%s, Image=%s\n", userID, req.RecipeID, req.Title, req.Image)
+
 	//add recipe to favorites table in the database(linked to user ID)
 	err := db.AddRecipeToFavorites(userID, req.RecipeID, req.Title, req.Image)
 	if err != nil {
@@ -142,6 +145,7 @@ func AddFavoriteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Println("Recipe added to favorites successfully")
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"message": "Recipe added to favorites successfully"})
 }

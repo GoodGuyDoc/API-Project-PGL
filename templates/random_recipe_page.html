@@ -211,6 +211,15 @@
       Step 3: Press the Generate Button to Get Your Random Recipe
     </h2>
     <div>
+      <label for="num-recipes">Number of Recipes:</label>
+      <input
+        type="number"
+        id="num-recipes"
+        name="num-recipes"
+        min="1"
+        value="1"
+        style="width: 100px; margin-bottom: 20px;"
+      />
       <button
         id="generate-recipe-button"
         style="width: 85%"
@@ -269,6 +278,8 @@
         return options;
       }
       function getNewRecipe() {
+
+
         const selectIds = [
           "#diet-select",
           "#meal-type-select",
@@ -284,24 +295,54 @@
           id = selectId.replace("#", "");
           results[id] = extractSelectOptions(selectId);
         });
+
+        //for multiple recipes
+        const numRecipes = document.getElementById("num-recipes").value || 1;
+
         $.ajax({
           type: "POST",
-          url: "/api/recipes/byTag",
+          url: `/api/recipes/byTag?count=${numRecipes}`,
           data: JSON.stringify(results),
           contentType: "application/json",
           success: function (response) {
             console.log(response);
-            response = response[0];
-            document.getElementById("recipe-results-image").src =
-              response.image;
-            document.getElementById("recipe-name-result").innerText =
-              response.title;
-            document.getElementById("recipe-id").value = response.id;
+            const container = document.getElementById("recipe-results-container");
+            container.innerHTML = "";
+            //displaying each recipe
+            response.forEach((recipe) => {
+              const recipeDiv = document.createElement("div");
+              recipeDiv.classList.add("recipe-item");
+
+              const imageContainer = document.createElement("div");
+              imageContainer.style.position = "relative";
+
+              const recipeImage = document.createElement("img");
+              recipeImage.src = recipe.image;
+              recipeImage.alt = recipe.title;
+
+              const saveButton = document.createElement("button");
+              saveButton.innerText = "♡"; // icon for favorites
+              saveButton.addEventListener("click", () => {
+                saveRecipeToFavorites(recipe.id, recipe.title, recipe.image);
+              });
+
+              imageContainer.appendChild(recipeImage);
+              imageContainer.appendChild(saveButton);
+              recipeDiv.appendChild(imageContainer);
+
+              const recipeText = document.createElement("div");
+              recipeText.innerHTML = `<h3>${recipe.title}</h3>`;
+              recipeDiv.appendChild(recipeText);
+
+              container.appendChild(recipeDiv);
+            });
             $("#recipe-results").show("fast");
             $("#similar-recipe-button").prop("disabled", false);
           },
           error: function (response) {
             console.log(response);
+            document.getElementById("recipe-results-text").innerHTML =
+            "Failed to fetch recipes.";
           },
         });
       }
@@ -324,6 +365,28 @@
           },
         });
       }
+      function saveRecipeToFavorites(recipeId, title, image) {
+      const data = {
+        recipe_id: recipeId,
+        title: title,
+        image: image,
+      };
+
+      $.ajax({
+        type: "POST",
+        url: "/api/add-favorite",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        success: function (response) {
+          alert("Recipe added to favorites successfully!");
+        },
+        error: function (response) {
+          console.log(response);
+          alert("Failed to add recipe to favorites. Please try again.");
+        },
+      });
+    }
+
     </script>
   </div>
 </main>
