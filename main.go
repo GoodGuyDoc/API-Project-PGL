@@ -41,4 +41,5 @@ func TestSetupServer(t *testing.T) {
 	if isFailed != nil {
 		t.Fatalf("Test Setup failed. No other aspects of the program can continue...")
 	}
+	t.Log("TestSetupServer Completed")
 }

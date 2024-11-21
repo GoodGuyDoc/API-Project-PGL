@@ -3,8 +3,6 @@ package api
 import (
 	"fmt"
 	"os"
-	"path/filepath"
-	"testing"
 )
 
 type RecipeResponse struct {
@@ -35,7 +33,7 @@ type Ingredient struct {
 // type Step struct {
 // 	Number int    `json:"number"`
 // 	Step   string `json:"step"`
-// }
+// }logToFile
 
 // Returns count amount of random recipes from spoonacular api
 func GetRandomRecipes(count int) ([]Recipe, error) {
@@ -97,29 +95,4 @@ func logToFile(filename string, data []byte) error {
 	}
 
 	return nil
-}
-
-func TestRandomRecipeCall(t *testing.T) {
-	_, err := GetRandomRecipes(100)
-	if err != nil {
-		t.Errorf("There was an error in random recipe testing ERROR: %v", err)
-	} else {
-		t.Log("RandomRecipe Call Successful.")
-	}
-}
-
-func TestLogToFile(t *testing.T) {
-	tempFile, err := os.CreateTemp("./test", "testlogfile*") //Create the temp file
-	if err != nil {
-		t.Errorf("There was an error when creating the testing tempFile: %v", err)
-	}
-	defer func() {
-		tempFile.Close()
-		os.Remove(tempFile.Name())
-	}()
-	fileAbs, err := filepath.Abs(tempFile.Name())
-	err = logToFile(fileAbs, []byte("Hello World!"))
-	if err != nil {
-		t.Errorf("There was an error while testing file logging %v", err)
-	}
 }

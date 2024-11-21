@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
-	"testing"
 )
 
 type SimilarRecipe struct {
@@ -44,14 +43,4 @@ func GetSimilarRecipe(recipeId string, count int) ([]Recipe, error) {
 	}
 	// if we did not find a good api key, throw an error (we finished looping)
 	return nil, fmt.Errorf("error making request to Spoonacular API: %w", errors.New("all api keys are ratelimited"))
-}
-
-func TestSimilarRecipe(t *testing.T) error {
-	//Random Similar Recipe call just for testing
-	_, err := GetSimilarRecipe("122", 1)
-	if err != nil {
-		t.Errorf("There was an error grabbing similar recipe %v", err)
-		return err
-	}
-	return nil
 }
