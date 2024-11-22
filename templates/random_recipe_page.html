@@ -333,10 +333,17 @@
       }
       function addToFavorites() {
         const recipeId = document.getElementById("recipe-id").value;
+        const recipeName =
+          document.getElementById("recipe-name-result").innerText;
+        const recipeImage = document.getElementById("recipe-results-image").src;
         $.ajax({
           type: "POST",
           url: "/api/add-favorite",
-          data: JSON.stringify({ recipeId: recipeId }),
+          data: JSON.stringify({
+            recipeId: recipeId,
+            recipeName: recipeName,
+            recipeImage: recipeImage,
+          }),
           contentType: "application/json",
           success: function (response) {
             console.log(response);
