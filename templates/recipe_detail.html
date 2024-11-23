@@ -1,41 +1,123 @@
 {{template "header.html" "styles.css"}}
+
+<nav class="navbar">
+    <a href="/" class="active">Home</a>
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+    <a href="/profile">Profile</a>
+    <a href="/about">About</a>
+</nav>
+
 <main>
-    <h1>Recipe Details</h1>
-    <div id="recipe-content"></div>
+    <div class="recipe-container">
+        <h1 id="recipe-title">Recipe Details</h1>
+
+        <div id="loading-spinner" class="spinner">Loading...</div>
+
+        <div id="recipe-details" class="recipe-details" style="display: none;">
+            <section id="recipe-image-section">
+                <img id="recipe-image" src="" alt="Recipe Image" class="recipe-image">
+            </section>
+
+            <section id="ingredients-section">
+                <h2>Ingredients</h2>
+                <ul id="ingredients-list">
+                    <!-- Ingredients will be dynamically populated here -->
+                </ul>
+            </section>
+
+            <section id="instructions-section">
+                <h2>Instructions</h2>
+                <ol id="instructions-list">
+                    <!-- Instructions will be dynamically populated here -->
+                </ol>
+            </section>
+        </div>
+    </div>
 
     <script>
-        const recipeID = "{{.RecipeID}}";
-
-        // Fetch recipe details based on the recipe ID.
         async function fetchRecipeDetails() {
-            const response = await fetch(`/api/recipe/${recipeID}`);
-            if (response.ok) {
+            const recipeID = "{{.RecipeID}}"; // Recipe ID passed from the server
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const recipeDetails = document.getElementById('recipe-details');
+
+            try {
+                // Display the loading spinner
+                loadingSpinner.style.display = 'block';
+                recipeDetails.style.display = 'none';
+
+                // Fetch recipe details using the API endpoint
+                const response = await fetch(`/api/recipe/${recipeID}`);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch recipe. HTTP Status: ${response.status}`);
+                }
+
                 const recipe = await response.json();
-                const content = document.getElementById('recipe-content');
-                content.innerHTML = `
-                    <h2>${recipe.title}</h2>
-                    <img src="${recipe.image}" alt="${recipe.title}" style="max-width: 400px;">
-                    <h3>Ingredients:</h3>
-                    <ul>
-                        ${recipe.extendedIngredients.map(ingredient => `<li>${ingredient.original}</li>`).join('')}
-                    </ul>
-                    <h3>Instructions:</h3>
-                    ${recipe.analyzedInstructions.map(instruction => `
-                        <div>
-                            <h4>${instruction.name}</h4>
-                            <ol>
-                                ${instruction.steps.map(step => `<li>${step.step}</li>`).join('')}
-                            </ol>
-                        </div>
-                    `).join('')}
+
+                if (!recipe) {
+                    throw new Error('No recipe data received.');
+                }
+
+                // Update the page with recipe details
+                updateRecipeDetails(recipe);
+
+                // Hide the spinner and display the details
+                loadingSpinner.style.display = 'none';
+                recipeDetails.style.display = 'block';
+            } catch (error) {
+                console.error('Error fetching recipe:', error);
+
+                
+                recipeDetails.innerHTML = `
+                    <p>Unable to load recipe. Please try again later.</p>
                 `;
-            } else {
-                console.error('Failed to fetch recipe details');
+                recipeDetails.style.display = 'block';
+                loadingSpinner.style.display = 'none';
             }
         }
 
-        // Load recipe details on page load.
-        fetchRecipeDetails();
+        // Updates the recipe details section with fetched data
+        function updateRecipeDetails(recipe) {
+            
+            const titleElement = document.getElementById('recipe-title');
+            titleElement.textContent = recipe.title || 'Untitled Recipe';
+
+          
+            const recipeImage = document.getElementById('recipe-image');
+            recipeImage.src = recipe.image || '/path/to/default-image.jpg';
+            recipeImage.alt = recipe.title || 'Recipe Image';
+
+            
+            const ingredientsList = document.getElementById('ingredients-list');
+            ingredientsList.innerHTML = ''; // Clear existing ingredients
+            if (recipe.extendedIngredients?.length > 0) {
+                recipe.extendedIngredients.forEach(ingredient => {
+                    const li = document.createElement('li');
+                    li.textContent = ingredient.original || 'Unknown Ingredient';
+                    ingredientsList.appendChild(li);
+                });
+            } else {
+                ingredientsList.innerHTML = '<li>No ingredients available.</li>';
+            }
+
+            
+            const instructionsList = document.getElementById('instructions-list');
+            instructionsList.innerHTML = ''; // Clear existing instructions
+            const steps = recipe.analyzedInstructions?.[0]?.steps || [];
+            if (steps.length > 0) {
+                steps.forEach(step => {
+                    const li = document.createElement('li');
+                    li.textContent = step.step || 'Step unavailable.';
+                    instructionsList.appendChild(li);
+                });
+            } else {
+                instructionsList.innerHTML = '<li>No instructions available.</li>';
+            }
+        }
+
+        // Fetch recipe details when the page loads
+        document.addEventListener('DOMContentLoaded', fetchRecipeDetails);
     </script>
 </main>
+
 {{template "footer.html" .}}
