@@ -222,13 +222,20 @@
       <div id="recipe-results">
         <h2>Recipe Results</h2>
         <div id="recipe-results-container">
-          <div>
-            <img src="" id="recipe-results-image" />
-          </div>
           <div id="recipe-results-text">
             <h3>
               Recipe Name: <span id="recipe-name-result">Recipe Name</span>
             </h3>
+          </div>
+          <div class="image-container">
+            <img src="" id="recipe-results-image" />
+            <button
+              id="add-to-favorites-button"
+              class="additional-button"
+              onclick="addToFavorites()"
+            >
+              ˗ˏˋ ★ ˎˊ˗
+            </button>
           </div>
         </div>
       </div>
@@ -236,7 +243,7 @@
         <button
           id="similar-recipe-button"
           class="additional-button"
-          disabled
+          enabled
           onclick="getSimilarRecipe()"
         >
           Get Similar Recipe
@@ -321,6 +328,31 @@
           },
           error: function (response) {
             console.log(response);
+          },
+        });
+      }
+      function addToFavorites() {
+        const recipeId = document.getElementById("recipe-id").value;
+        const recipeName =
+          document.getElementById("recipe-name-result").innerText;
+        const recipeImage = document.getElementById("recipe-results-image").src;
+        $.ajax({
+          type: "POST",
+          url: "/api/add-favorite",
+          data: JSON.stringify({
+            recipeId: recipeId,
+            recipeName: recipeName,
+            recipeImage: recipeImage,
+          }),
+          contentType: "application/json",
+          success: function (response) {
+            console.log(response);
+            document.getElementById("add-to-favorites-button").disabled = true;
+            alert("Recipe added to favorites successfully!");
+          },
+          error: function (response) {
+            console.log(response);
+            alert("Failed to add recipe to favorites. Please try again.");
           },
         });
       }

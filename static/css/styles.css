@@ -724,7 +724,27 @@
  .additional-button-link button {
   width: 100%;
  }
- 
+ .image-container {
+  position: relative;
+  display: inline-block;
+}
+
+#recipe-results-image {
+  display: block;
+}
+
+#add-to-favorites-button {
+  position: absolute;
+  bottom: 0px; 
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(96, 70, 59, 0.9); 
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  color: #f2f2f2;
+}
  
  
  
