@@ -359,8 +359,7 @@
         });
       }
       function updateDetailsLink(recipeId) {
-        const btn = document.getElementById("recipeDetailsButton");
-        btn.href = "/recipe_detail/"+recipeId;
+        document.getElementById("recipeDetailsButton").href = "/recipe_detail/"+recipeId;
         console.log(recipeId);
       }
     </script>
