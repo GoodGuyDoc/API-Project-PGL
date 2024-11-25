@@ -311,7 +311,7 @@
           error: function (response) {
             console.log(response);
           },
-        });        
+        });
       }
       function getSimilarRecipe() {
         const recipeId = document.getElementById("recipe-id").value;
@@ -342,9 +342,9 @@
           type: "POST",
           url: "/api/add-favorite",
           data: JSON.stringify({
-            recipeId: recipeId,
-            recipeName: recipeName,
-            recipeImage: recipeImage,
+            recipeID: recipeId,
+            Title: recipeName,
+            Image: recipeImage,
           }),
           contentType: "application/json",
           success: function (response) {
@@ -359,7 +359,8 @@
         });
       }
       function updateDetailsLink(recipeId) {
-        document.getElementById("recipeDetailsButton").href = "/recipe_detail/"+recipeId;
+        document.getElementById("recipeDetailsButton").href =
+          "/recipe_detail/" + recipeId;
         console.log(recipeId);
       }
     </script>
