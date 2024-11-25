@@ -311,7 +311,7 @@
           error: function (response) {
             console.log(response);
           },
-        });
+        });        
       }
       function getSimilarRecipe() {
         const recipeId = document.getElementById("recipe-id").value;
@@ -359,8 +359,7 @@
         });
       }
       function updateDetailsLink(recipeId) {
-        document.getElementById("recipeDetailsButton").href =
-          "/recipe_detail/" + recipeId;
+        document.getElementById("recipeDetailsButton").href = "/recipe_detail/"+recipeId;
         console.log(recipeId);
       }
     </script>
