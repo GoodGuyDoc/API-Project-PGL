@@ -44,8 +44,10 @@
             const response = await fetch('/api/profile');
             if (response.ok) {
                 const profile = await response.json();
+                console.log(profile);
                 displayProfile(profile);
                 displayFavorites(profile.Recipes);
+                console.log(profile.Recipes);
             } else {
                 throw new Error('Failed to load profile data');
             }
@@ -72,6 +74,7 @@
 
     function displayFavorites(recipes) {
         if (recipes && recipes.length > 0) {
+            console.log(recipes[0]);
             favoritesContent.innerHTML = `
                 <h2>Your Favorite Recipes</h2>
                 <div class="favorites-grid">

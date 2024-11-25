@@ -304,6 +304,7 @@
             document.getElementById("recipe-name-result").innerText =
               response.title;
             document.getElementById("recipe-id").value = response.id;
+            document.getElementById("add-to-favorites-button").disabled = false;
             updateDetailsLink(response.id);
             $("#recipe-results").show("fast");
             $("#similar-recipe-button").prop("disabled", false);
@@ -326,6 +327,7 @@
             document.getElementById("recipe-name-result").innerText =
               response.title;
             document.getElementById("recipe-id").value = response.id;
+            document.getElementById("add-to-favorites-button").disabled = false;
             updateDetailsLink(response.id);
           },
           error: function (response) {
@@ -342,9 +344,9 @@
           type: "POST",
           url: "/api/add-favorite",
           data: JSON.stringify({
-            recipeId: recipeId,
-            recipeName: recipeName,
-            recipeImage: recipeImage,
+            recipeID: recipeId,
+            Title: recipeName,
+            Image: recipeImage,
           }),
           contentType: "application/json",
           success: function (response) {
