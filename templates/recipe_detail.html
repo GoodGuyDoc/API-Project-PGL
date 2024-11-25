@@ -1,41 +1,72 @@
 {{template "header.html" "styles.css"}}
+<nav class="navbar">
+  <a href="/" class="active">Home</a>
+  <a href="/login">Login</a>
+  <a href="/register">Register</a>
+  <a href="/profile">Profile</a>
+  <a href="/about">About</a>
+</nav>
 <main>
-    <h1>Recipe Details</h1>
-    <div id="recipe-content"></div>
+  <!--<h1>Recipe Details</h1>-->
+  <div id="recipe-content" style="text-align: center"><h1>Loading...</h1></div>
+  <br />
 
-    <script>
-        const recipeID = "{{.RecipeID}}";
+  <script>
+    const recipeID = "{{.RecipeID}}";
 
-        // Fetch recipe details based on the recipe ID.
-        async function fetchRecipeDetails() {
-            const response = await fetch(`/api/recipe/${recipeID}`);
-            if (response.ok) {
-                const recipe = await response.json();
-                const content = document.getElementById('recipe-content');
-                content.innerHTML = `
-                    <h2>${recipe.title}</h2>
-                    <img src="${recipe.image}" alt="${recipe.title}" style="max-width: 400px;">
-                    <h3>Ingredients:</h3>
-                    <ul>
-                        ${recipe.extendedIngredients.map(ingredient => `<li>${ingredient.original}</li>`).join('')}
+    // Fetch recipe details based on the recipe ID.
+    async function fetchRecipeDetails() {
+      const response = await fetch(`/api/recipe/${recipeID}`);
+      if (response.ok) {
+        const recipe = await response.json();
+        console.log(recipe);
+        const content = document.getElementById("recipe-content");
+        content.innerHTML = `
+                    <h2 style="font-size: 32px; color: #567568;">${
+                      recipe.title
+                    }</h2>
+                    <br>
+                    <img src="${recipe.image}"alt="${
+          recipe.title
+        }" style="max-width: 400px;">
+        <br>
+                    <h3 style="font-size: 24px; color: #567568;" id="ingredients-header">Ingredients</h3>
+                    <hr>
+                    <ul style="list-style-type: none; font-size: 18px;">
+                        ${recipe.extendedIngredients
+                          .map(
+                            (ingredient) => `<li> ${ingredient.original}</li>`
+                          )
+                          .join("")}
                     </ul>
-                    <h3>Instructions:</h3>
-                    ${recipe.analyzedInstructions.map(instruction => `
+                    <br>
+                    <h3 style="font-size: 24px; color: #567568">Instructions</h3>
+                    <hr>
+                    ${recipe.analyzedInstructions
+                      .map(
+                        (instruction) => `
                         <div>
                             <h4>${instruction.name}</h4>
-                            <ol>
-                                ${instruction.steps.map(step => `<li>${step.step}</li>`).join('')}
-                            </ol>
+                            <ul style="list-style-type: none; font-size: 18px;" id="instructions-list">
+                                ${instruction.steps
+                                  .map(
+                                    (step) =>
+                                      `<li style="display: block; max-width: 700px; word-wrap: break-wrap; line-height: 1.5;">𓐐𓎩 ${step.step}</li>`
+                                  )
+                                  .join("")}
+                            </ul>
                         </div>
-                    `).join('')}
+                    `
+                      )
+                      .join("")}
                 `;
-            } else {
-                console.error('Failed to fetch recipe details');
-            }
-        }
+      } else {
+        console.error("Failed to fetch recipe details");
+      }
+    }
 
-        // Load recipe details on page load.
-        fetchRecipeDetails();
-    </script>
+    // Load recipe details on page load.
+    fetchRecipeDetails();
+  </script>
 </main>
 {{template "footer.html" .}}

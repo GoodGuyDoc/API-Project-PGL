@@ -248,9 +248,9 @@
         >
           Get Similar Recipe
         </button>
-        <a href="/recipe_detail" class="additional-button-link"
+        <a id="recipeDetailsButton" class="additional-button-link"
           ><button id="recipe-ingredients-button" class="additional-button">
-            Recipe Ingredients
+            Recipe Details
           </button>
         </a>
       </div>
@@ -304,6 +304,7 @@
             document.getElementById("recipe-name-result").innerText =
               response.title;
             document.getElementById("recipe-id").value = response.id;
+            updateDetailsLink(response.id);
             $("#recipe-results").show("fast");
             $("#similar-recipe-button").prop("disabled", false);
           },
@@ -325,6 +326,7 @@
             document.getElementById("recipe-name-result").innerText =
               response.title;
             document.getElementById("recipe-id").value = response.id;
+            updateDetailsLink(response.id);
           },
           error: function (response) {
             console.log(response);
@@ -355,6 +357,11 @@
             alert("Failed to add recipe to favorites. Please try again.");
           },
         });
+      }
+      function updateDetailsLink(recipeId) {
+        document.getElementById("recipeDetailsButton").href =
+          "/recipe_detail/" + recipeId;
+        console.log(recipeId);
       }
     </script>
   </div>

@@ -745,6 +745,8 @@
   width: 100%;
   color: #f2f2f2;
 }
- 
+  #instructions-list>li {
+    margin-bottom: 10px;
+  }
  
  

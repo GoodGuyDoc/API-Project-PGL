@@ -10,10 +10,11 @@ type RecipeResponse struct {
 }
 
 type Recipe struct {
-	ID          int          `json:"id"`
-	Title       string       `json:"title"`
-	Image       string       `json:"image"`
-	Ingredients []Ingredient `json:"extendedIngredients"`
+	ID                   int                   `json:"id"`
+	Title                string                `json:"title"`
+	Image                string                `json:"image"`
+	Ingredients          []Ingredient          `json:"extendedIngredients"`
+	AnalyzedInstructions []AnalyzedInstruction `json:"analyzedInstructions"`
 }
 
 type Ingredient struct {
@@ -25,15 +26,15 @@ type Ingredient struct {
 	Original string  `json:"original"` // Original string description from the recipe
 }
 
-// type AnalyzedInstruction struct {
-// 	Name  string `json:"name"`
-// 	Steps []Step `json:"steps"`
-// }
+type AnalyzedInstruction struct {
+	Name  string `json:"name"`
+	Steps []Step `json:"steps"`
+}
 
-// type Step struct {
-// 	Number int    `json:"number"`
-// 	Step   string `json:"step"`
-// }logToFile
+type Step struct {
+	Number int    `json:"number"`
+	Step   string `json:"step"`
+}
 
 // Returns count amount of random recipes from spoonacular api
 func GetRandomRecipes(count int) ([]Recipe, error) {
