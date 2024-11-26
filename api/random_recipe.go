@@ -45,8 +45,10 @@ func GetRandomRecipes(count int) ([]Recipe, error) {
 	for i := 0; i < 3; i++ {
 		apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/random?apiKey=%s&number=%d", API_KEY[i], count)
 		recipeResponse, err = getRecipeResponse(apiUrl)
-
+		fmt.Print("error found: ")
+		fmt.Print("value found: ")
 		if err != nil && err.Error() == "this api key is ratelimited" {
+			fmt.Println("RATELIMIT ", i)
 			continue
 		} else {
 			break
@@ -62,14 +64,29 @@ func GetRandomRecipes(count int) ([]Recipe, error) {
 
 // Returns count amount of random recipes from spoonacular api that are tagged with the specified tags
 func GetRandomRecipesByTag(count int, includeTags string, excludeTags string) ([]Recipe, error) {
-	apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/random?apiKey=%s&number=%d&include-tags=%s&exclude-tags=%s", API_KEY[0], count, includeTags, excludeTags)
-	recipeResponse, err := getRecipeResponse(apiUrl)
-	if err != nil {
-		if err.Error() == "no recipes found" {
-			return []Recipe{}, nil // return empty struct
-		} else {
-			return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
+	var recipeResponse *RecipeResponse
+	var err error
+
+	curr_api_key := getAPIKeys() // make sure keys are initialized
+
+	// there are no while loops in go, lol
+	for i := 0; i < len(curr_api_key); i++ {
+		apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/random?apiKey=%s&number=%d&include-tags=%s&exclude-tags=%s", curr_api_key[i], count, includeTags, excludeTags)
+		recipeResponse, err = getRecipeResponse(apiUrl)
+		if err != nil {
+			if err.Error() == "this api key is ratelimited" {
+				continue
+			} else if err.Error() == "no recipes found" {
+				return []Recipe{}, nil // return empty struct
+			} else {
+				return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
+			}
 		}
+		break
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
 	}
 
 	return recipeResponse.Recipes, nil

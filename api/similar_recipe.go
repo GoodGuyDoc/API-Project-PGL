@@ -19,8 +19,10 @@ func GetSimilarRecipe(recipeId string, count int) ([]Recipe, error) {
 	var similarRecipes []SimilarRecipe
 	var recipes []Recipe
 
-	for i := 0; i < 3; i++ {
-		apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/%s/similar?apiKey=%s&number=%d", recipeId, API_KEY[i], count)
+	curr_api_key := getAPIKeys() // make sure keys are initialized
+
+	for i := 0; i < len(curr_api_key); i++ {
+		apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/%s/similar?apiKey=%s&number=%d", recipeId, curr_api_key[i], count)
 		err := sendApiCall(apiUrl, &similarRecipes)
 
 		if err != nil && err.Error() == "this api key is ratelimited" { // bad api key, go next

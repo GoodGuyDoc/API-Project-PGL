@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -17,17 +16,25 @@ func ConvertAmount(ingredientName string, amount float64, unit string, convertTo
 	var conversionInfo ConversionInformation
 	var err error
 
-	for i := 0; i < 3; i++ {
-		apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/convert?apiKey=%s&ingredientName=%s&sourceAmount=%.2f&sourceUnit=%s&targetUnit=%s", API_KEY[i], ingredientName, amount, unit, convertToUnit)
+	curr_api_key := getAPIKeys() // make sure keys are initialized
+
+	for i := 0; i < len(curr_api_key); i++ {
+		apiUrl := fmt.Sprintf("https://api.spoonacular.com/recipes/convert?apiKey=%s&ingredientName=%s&sourceAmount=%.2f&sourceUnit=%s&targetUnit=%s", curr_api_key[i], ingredientName, amount, unit, convertToUnit)
 		err = sendApiCall(apiUrl, &conversionInfo)
 
-		if err != nil && err.Error() == "this api key is ratelimited" {
-			continue
-		} else if err != nil {
-			return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
+		if err != nil {
+			if err.Error() == "this api key is ratelimited" {
+				continue
+			} else {
+				return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
+			}
 		}
-		return &conversionInfo, nil
+		break
 	}
-	// if we did not find a good api key, throw an error (we finished looping)
-	return nil, fmt.Errorf("error making request to Spoonacular API: %w", errors.New("all api keys are ratelimited"))
+
+	if err != nil {
+		return nil, fmt.Errorf("error making request to Spoonacular API: %w", err)
+	}
+
+	return &conversionInfo, nil
 }
