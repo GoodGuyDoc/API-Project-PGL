@@ -130,3 +130,15 @@ func AddRecipeToFavorites(userID, recipeID int, title, image string) error {
 	}
 	return nil
 }
+
+func RemoveRecipeFromFavorites(userID, recipeID int) error {
+	query := `
+		DELETE FROM Recipes 
+		WHERE user_id = $1 AND recipe_id = $2
+	`
+	_, err := DB.Exec(query, userID, recipeID)
+	if err != nil {
+		return fmt.Errorf("error removing recipe from favorites: %w", err)
+	}
+	return nil
+}
