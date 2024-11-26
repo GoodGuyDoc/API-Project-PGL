@@ -233,8 +233,7 @@
               id="add-to-favorites-button"
               class="additional-button"
               onclick="addToFavorites()"
-            >
-              ˗ˏˋ ★ ˎˊ˗
+            >˗ˏˋ ★ ˎˊ˗
             </button>
           </div>
         </div>
@@ -349,7 +348,7 @@
           contentType: "application/json",
           success: function (response) {
             console.log(response);
-            document.getElementById("add-to-favorites-button").disabled = true;
+            document.getElementById("add-to-favorites-button");
             alert("Recipe added to favorites successfully!");
           },
           error: function (response) {

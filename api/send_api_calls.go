@@ -2,13 +2,30 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"reflect"
+	"sync"
 )
 
-var API_KEY = [3]string{"a867e9b240a645c3a08192f8d6b8b61c", "7e40fb0f0f254a1aa1444150b5c71d07", "eea7c0c25e204d42b58aa324a6ddec5c"}
+var API_KEY [3]string
+var once sync.Once
+
+func initializeAPIKey() {
+	API_KEY = [3]string{
+		"a867e9b240a645c3a08192f8d6b8b61c",
+		"7e40fb0f0f254a1aa1444150b5c71d07",
+		"eea7c0c25e204d42b58aa324a6ddec5c",
+	}
+}
+
+func getAPIKeys() [3]string {
+	once.Do(initializeAPIKey) // Ensures the initialization happens only once
+	fmt.Println("apikey1 in func: ", API_KEY[1])
+	return API_KEY
+}
 
 // Takes an apiString input to call, then returns a *RecipeResponse, or an error
 func getRecipeResponse(apiString string) (*RecipeResponse, error) {
@@ -20,7 +37,8 @@ func getRecipeResponse(apiString string) (*RecipeResponse, error) {
 
 	if resp.StatusCode != http.StatusOK {
 		if resp.StatusCode == 402 || resp.StatusCode == 429 {
-			return nil, fmt.Errorf("this api key is ratelimited")
+			tempErr := errors.New("this api key is ratelimited")
+			return nil, fmt.Errorf("%w", tempErr)
 		}
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
